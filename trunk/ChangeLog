@@ -1,0 +1,50 @@
+2.0.0rc4
+--------
+- New build system - Waf.
+- Recognize current GTK+ widget theme on startup.
+- Recognize current font on startup.
+- Basic support for icon themes.
+- Code cleanup/Small fixes.
+	
+- Fixed some memory leaks.
+
+2.0.0rc3
+________
+
+- The name of project is changed to "Gtk Theme Switch Ex".
+- Removed all deprecated methods and GTK+ widgets.
+- Make it build with modern GTK+ versions.
+- Now listed only gtk themes (excluding Metacity, OpenBox and other themes).
+- Autosave of previous .gtkrc-2.0.
+- Renamed "Ok" button to "Apply" in preview dialog.
+- Added "Exit" button in Dock.
+- Some GUI enhancements
+- Code cleanup.
+- Licence changed to GPL v.3
+- Copyrights updated.
+
+- Fixed crash when no one theme is selected.
+
+2.0.0rc2
+--------
+
+- Changed binary name to switch2
+- Fixed switching in some cases.
+- Fixed user font selection.
+
+2.0.0rc1
+-----
+
+- Port to Gtk2.0.
+
+1.0.1
+-----
+
+- Fix for window resizing at startup.
+- Fix for 100%  cpu usage when previewing themes.
+
+
+1.0
+---
+
+Rewrote from Perl to C.
