@@ -316,21 +316,23 @@ write_rc_file (gchar *include_file, gchar *path)
   gchar *bak = g_strconcat (path, ".gts-ex-save", NULL);
   g_rename (path, bak);
 
-  FILE *gtkrc = g_fopen(path, "w");
-  /* the caps stuff is bullshit for gnome */
-  fprintf (gtkrc, 
-	  "# -- THEME AUTO-WRITTEN DO NOT EDIT\ninclude \"%s\"\n\n", 
-	  include_file);
+  rcfile_data *data = g_new(rcfile_data, 1);
+  data->gtkrc_file = include_file;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_font_button)))
-    fprintf (gtkrc, "gtk-font-name=\"%s\"\n", newfont);
+    data->font_name = newfont;
+  else
+    data->font_name = NULL;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_icon_button)))
-    fprintf (gtkrc, "gtk-icon-theme-name=\"%s\"\n",
-	     gtk_combo_box_get_active_text (GTK_COMBO_BOX (icon_combo)));
+    data->icontheme_name = 
+      gtk_combo_box_get_active_text (GTK_COMBO_BOX (icon_combo));
+  else
+    data->icontheme_name = NULL;
+  
+  dump_rcfile(path, data);
 
-  fprintf(gtkrc, "include \"%s/.gtkrc.mine\"\n\n# -- THEME AUTO-WRITTEN DO NOT EDIT\n", homedir);
-  fclose (gtkrc);
+  g_free(data);
 }
 
 static void
