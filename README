@@ -1,0 +1,15 @@
+Gtk Theme Switch Ex (gtk-theme-switch-ex)
+http://code.google.com/p/gtk-theme-switch-ex
+
+Gtk Theme Switch Ex is a small and fast program which allows you to preview 
+and switch GTK themes. It is designed to be usable and flexible from both 
+the shell prompt and X-Windows display. Please see the manual page or run 
+the switch executable with the -help option for information on the allowed 
+command line options.
+
+Gtk Theme Switch Ex is based on the Gtk Theme Switch free software 
+version 2.0.0.rc2, originally developed by Aaron Lehman and Maher Awamy. 
+Original version can be found at http://www.muhri.net/nav.php3?node=gts
+
+
+Dmitry Stropaloff <helions8@gmail.com>

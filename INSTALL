@@ -1,0 +1,11 @@
+To install Gtk Theme Switch Ex follow:
+1. Configure
+    $ ./waf configure
+    or with prefix:
+    $ ./waf --prefix=/usr configure
+2. Build
+    $ ./waf
+3. Install (with root priveleges)
+    $ ./waf install
+    or 
+    $ ./waf --destdir=~/tmpdir install
