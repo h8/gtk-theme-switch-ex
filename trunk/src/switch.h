@@ -38,7 +38,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <glib/giochannel.h>

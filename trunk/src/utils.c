@@ -146,3 +146,22 @@ send_refresh_signal(void)
   event.data_format = 8;
   gdk_event_send_clientmessage_toall((GdkEvent *)&event);
 }
+
+void
+dump_rcfile(gchar *path, rcfile_data *data)
+{
+  FILE *gtkrc = g_fopen(path, "w");
+  /* the caps stuff is bullshit for gnome */
+  fprintf (gtkrc, 
+	  "# -- THEME AUTO-WRITTEN DO NOT EDIT\ninclude \"%s\"\n", 
+	  data->gtkrc_file);
+
+  if (data->font_name)
+    fprintf (gtkrc, "gtk-font-name=\"%s\"\n", data->font_name);
+
+  if (data->icontheme_name)
+    fprintf (gtkrc, "gtk-icon-theme-name=\"%s\"\n",
+    data->icontheme_name);
+
+  fclose (gtkrc);
+}
