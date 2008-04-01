@@ -475,8 +475,8 @@ dock (void)
   gtk_window_set_title(GTK_WINDOW(dockwin),"Theme Dock");
   gtk_window_set_resizable(GTK_WINDOW(dockwin), FALSE);
   g_signal_connect(G_OBJECT(dockwin),"destroy",G_CALLBACK(quit),NULL);
-  box = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 0);
+  box = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 5);
   label = gtk_label_new("Theme: ");
   gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,FALSE);
 
@@ -505,8 +505,8 @@ dock (void)
   gtk_box_pack_start(GTK_BOX(box),evbox,FALSE,FALSE,FALSE);
   gtk_widget_show_all(box);
      
-  box = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 0);
+  box = gtk_hbox_new(FALSE, 2);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 5);
 
   use_font_button = gtk_check_button_new_with_label("Use font: ");
   gtk_box_pack_start(GTK_BOX(box), use_font_button, FALSE, FALSE, 0);
@@ -514,7 +514,7 @@ dock (void)
      
   font_entry = gtk_entry_new ();
   gtk_entry_set_editable (GTK_ENTRY(font_entry), FALSE);
-  gtk_box_pack_start(GTK_BOX(box), font_entry, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(box), font_entry, TRUE, TRUE, 5);
   gtk_widget_show(font_entry);
   if (newfont)
   {
@@ -528,15 +528,15 @@ dock (void)
   browse = gtk_button_new_with_label("Browse...");
   g_signal_connect(G_OBJECT(browse), "clicked", 
 		   G_CALLBACK(font_browse_clicked), NULL);
-  gtk_box_pack_start(GTK_BOX(box), browse, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box), browse, FALSE, FALSE, 5);
 
   /* Icontheme Box  */
-  box_icontheme = gtk_hbox_new(FALSE, 0);
+  box_icontheme = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), 
-		     box_icontheme, FALSE, FALSE, 0);
+		     box_icontheme, FALSE, FALSE, 5);
 
   use_icon_button = gtk_check_button_new_with_label("Use icon theme: ");
-  gtk_box_pack_start(GTK_BOX(box_icontheme), use_icon_button, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box_icontheme), use_icon_button, FALSE, FALSE, 5);
   gtk_widget_show(use_icon_button);
 
   icon_combo = gtk_combo_box_new_text();
@@ -736,7 +736,7 @@ preview_window (gchar *rc_file)
   button2 = gtk_button_new_from_stock (GTK_STOCK_OPEN);
   toggle_button = gtk_toggle_button_new_with_label("Toggle Button");
   check_button = gtk_check_button_new_with_label("Check Button");
-  hbox = gtk_hbox_new(FALSE,0);
+  hbox = gtk_hbox_new(FALSE, 2);
   radio = gtk_radio_button_new_with_label(NULL,"Radio 1");
   group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
   radio2 = gtk_radio_button_new_with_label(group,"Radio 2");
@@ -761,7 +761,7 @@ preview_window (gchar *rc_file)
   cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   g_signal_connect_swapped(G_OBJECT(cancel),"clicked",
 			   G_CALLBACK(quit_preview),NULL);
-  hbox2 = gtk_hbox_new(FALSE,0);
+  hbox2 = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_start((GtkBox*)hbox2,ok,TRUE,TRUE,FALSE);
   gtk_box_pack_start((GtkBox*)hbox2,cancel,TRUE,TRUE,FALSE);
   gtk_container_add(GTK_CONTAINER(sw),clist);
@@ -779,10 +779,10 @@ preview_window (gchar *rc_file)
   gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
   label = gtk_label_new ("Insensitive Label");
   gtk_widget_set_sensitive (label, 0);
-  gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 5);
   button = gtk_button_new_with_label ("Insensitive Button");
   gtk_widget_set_sensitive (button, 0);
-  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 5);
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(sw), 
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -793,13 +793,13 @@ preview_window (gchar *rc_file)
 				 
   gtk_container_add (GTK_CONTAINER(sw), text);
 
-  gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 5);
 
   label = gtk_label_new ("About");
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
   label = gtk_label_new ("Gtk Theme Switch Ex v. 2.0.0rc4\nby Dmitry Stropaloff <helions8@gmail.com>\nHome: http://code.google.com/p/gtk-theme-switch-ex\n\nBased on the source code of Gtk Theme Switch software.");
-  gtk_box_pack_start (GTK_BOX(vbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX(vbox), label, TRUE, TRUE, 5);
 
   clist_insert(GTK_TREE_VIEW(clist));
 
