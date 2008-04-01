@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 import os
-import Params, gtk
+import Params
 
 VERSION='2.0.0-rc4'
 APPNAME='gtk-theme-switch-ex'
