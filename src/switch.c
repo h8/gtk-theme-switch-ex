@@ -798,7 +798,7 @@ preview_window (gchar *rc_file)
   label = gtk_label_new ("About");
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
-  label = gtk_label_new ("Gtk Theme Switch Ex v. 2.0.0rc4\nby Dmitry Stropaloff <helions8@gmail.com>\nHome: http://code.google.com/p/gtk-theme-switch-ex\n\nBased on the source code of Gtk Theme Switch software.");
+  label = gtk_label_new ("Gtk Theme Switch Ex v. 2.0.0svn\nby Dmitry Stropaloff <helions8@gmail.com>\nHome: http://code.google.com/p/gtk-theme-switch-ex\n\nBased on the source code of Gtk Theme Switch software.");
   gtk_box_pack_start (GTK_BOX(vbox), label, TRUE, TRUE, 5);
 
   clist_insert(GTK_TREE_VIEW(clist));
