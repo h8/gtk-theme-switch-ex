@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 obj = bld.create_obj('cc', 'program')
-obj.find_sources_in_dirs('.') # take the sources in the current folder
+obj.find_sources_in_dirs('.')
 obj.includes='.'
 obj.uselib='GTK GDK PANGO GOBJECT PCRE'
 obj.target='switch2'

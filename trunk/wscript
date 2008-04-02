@@ -4,7 +4,7 @@
 import os
 import Params
 
-VERSION='2.0.0-rc4'
+VERSION='2.0.0svn'
 APPNAME='gtk-theme-switch-ex'
 
 srcdir = '.'
@@ -16,7 +16,8 @@ def set_options(opt):
 def configure(conf):
 	conf.check_tool('gcc')
 
-	conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0')
+	if not conf.check_pkg('gtk+-2.0', destvar='GTK', vnum='2.6.0'):
+		Params.fatal("gtk-theme-swith-ex requires gtk+ library.")
 
 	conf.define('VERSION', VERSION)
 	conf.define('DATADIR', os.path.join(conf.env['PREFIX'], 'share'))
@@ -29,11 +30,15 @@ def configure(conf):
         libconf.uselib = 'PCRE'
         libconf.name = 'pcre'
         libconf.paths = ['/usr/lib']
-        libconf.run()
+        if not libconf.run():
+		Params.fatal("Missed dependencies (see above).")
 
 	conf.write_config_header('config.h')
 
 def build(bld):
+	# Change linker option. Need for GtkBuilder.
+	bld.m_allenvs['default']['SHLIB_MARKER'] = '-Wl,--export-dynamic'
+	
 	bld.add_subdirs('src')
 	bld.add_subdirs('man')
 
