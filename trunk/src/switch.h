@@ -43,10 +43,13 @@
 #include <glib/giochannel.h>
 #include <stdlib.h>
 #include <pcre.h>
+#include <gmodule.h>
 
 #include "includes.h"
 
 /* Variables */
+GtkBuilder *ui;
+
 GHashTable *hash;
 
 GList *glist = NULL;
@@ -58,15 +61,15 @@ gchar *execname;  /* == argv[0] */
 gchar *newfont;  /* The name of a new font to use as the default if the user has
 	       selected one. Otherwise NULL. */
 
-GtkWidget *dockwin;
+//GtkWidget *dockwin;
 GtkWidget *combo = NULL;
-GtkWidget *font_entry;
-GtkWidget *use_font_button;  /* toggle button */
-GtkWidget *use_icon_button;  /* toggle button */
-GtkWidget *box;
-GtkWidget *box_icontheme;  /* hbox for icon theme controls */
-GtkWidget *install_button;
-GtkWidget *browse;
+//GtkWidget *font_entry;
+//GtkWidget *use_font_button;  /* toggle button */
+//GtkWidget *use_icon_button;  /* toggle button */
+//GtkWidget *box;
+//GtkWidget *box_icontheme;  /* hbox for icon theme controls */
+//GtkWidget *install_button;
+//GtkWidget *browse;
 GtkWidget *icon_combo = NULL;  /* combo box for listing icon themes*/
 
 gint hidden = 1;
@@ -76,9 +79,9 @@ gint gtk_rc_icontheme_index = -1;  /* index of a used icon theme in a list */
 
 /* Functions */
 static GList *get_dirs(void);
-static void preview_clicked(GtkWidget *button, gpointer data);
+void preview_clicked(GtkWidget *button, gpointer data);
 static void update_newfont (void);
-static void apply_clicked(GtkWidget *button, gpointer data);
+void apply_clicked(GtkWidget *button, gpointer data);
 static void ok_clicked(gchar *rc);
 static void preview_apply_clicked(gchar *rc);
 static GtkTreeModel *create_model(void);
@@ -87,16 +90,13 @@ static void preview(gchar *rc_file);
 static void preview_window(gchar *rc_file);
 static short install_tarball (gchar *path, gchar **rc_file);
 static int switcheroo (gchar *actual);
-static void install_clicked (GtkWidget *w, gpointer data);
+void install_clicked (GtkWidget *w, gpointer data);
 static void install_ok_clicked (GtkWidget *w, gint arg1, gpointer data);
 static void search_for_theme_or_die_trying (gchar *actual, gchar **rc_file);
 static void set_font (GtkWidget *w, GtkWidget *dialog);
-static void font_browse_clicked (GtkWidget *w, gpointer data);
+void font_browse_clicked (GtkWidget *w, gpointer data);
 static void get_current_theme_params (void);
 static GList *get_icon_themes_list (void);
 void quit_preview();
 void quit();
-void hide_stuff();
-void show_stuff();
-void on_eventbox_click();
 void clist_insert(GtkTreeView *clist);

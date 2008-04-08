@@ -251,7 +251,7 @@ get_dirs (void)
   return list;
 }
 
-static void
+void
 preview_clicked(GtkWidget *button, gpointer data)
 {
   G_CONST_RETURN gchar *entry; 
@@ -278,11 +278,15 @@ preview_clicked(GtkWidget *button, gpointer data)
 static void 
 update_newfont (void)
 {
+  GtkWidget *use_button = GTK_WIDGET(gtk_builder_get_object(ui, 
+							    "use-font-toggle"));
+  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
+
   if (newfont) g_free (newfont);
 
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(use_font_button)))
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(use_button)))
   {
-    G_CONST_RETURN gchar *newerfont = gtk_entry_get_text (GTK_ENTRY(font_entry));
+    G_CONST_RETURN gchar *newerfont = gtk_entry_get_text (GTK_ENTRY(entry));
     if (newerfont && newerfont[0])
     {
       newfont = g_strdup(newerfont);
@@ -291,7 +295,7 @@ update_newfont (void)
   else newfont = NULL;
 }
 
-static void 
+void 
 apply_clicked(GtkWidget *button, gpointer data)
 {
   G_CONST_RETURN gchar *entry = 
@@ -312,6 +316,8 @@ apply_clicked(GtkWidget *button, gpointer data)
 static void
 write_rc_file (gchar *include_file, gchar *path)
 {
+  GtkWidget *use_button;
+
   /* first - save backup */
   gchar *bak = g_strconcat (path, ".gts-ex-save", NULL);
   g_rename (path, bak);
@@ -319,12 +325,14 @@ write_rc_file (gchar *include_file, gchar *path)
   rcfile_data *data = g_new(rcfile_data, 1);
   data->gtkrc_file = include_file;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_font_button)))
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-font-toggle"));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_button)))
     data->font_name = newfont;
   else
     data->font_name = NULL;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_icon_button)))
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-icon-toggle"));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_button)))
     data->icontheme_name = 
       gtk_combo_box_get_active_text (GTK_COMBO_BOX (icon_combo));
   else
@@ -355,7 +363,7 @@ preview_apply_clicked (gchar *rc_file)
   g_free(path_to_gtkrc);
 }
 
-static void 
+void 
 install_clicked (GtkWidget *w, gpointer data)
 {
   GtkWidget *fc;
@@ -416,8 +424,8 @@ install_ok_clicked (GtkWidget *w, gint arg1, gpointer data)
     /* set combo's item to the newly-installed theme */
     gtk_combo_box_set_active (GTK_COMBO_BOX (combo), pos);
 	
-    if (cbstate) /* checkbutton pressed */
-      apply_clicked(NULL, NULL);
+  if (cbstate) /* checkbutton pressed */
+    apply_clicked(NULL, NULL);
 
   /* I guess we should free this... */
   g_free (rc_file);
@@ -426,22 +434,25 @@ install_ok_clicked (GtkWidget *w, gint arg1, gpointer data)
 static void
 set_font (GtkWidget *w, GtkWidget *dialog)
 {
+  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
+
   if (newfont) g_free (newfont);
   newfont = 
-    gtk_font_selection_dialog_get_font_name (GTK_FONT_SELECTION_DIALOG(dialog));
-  gtk_entry_set_text (GTK_ENTRY(font_entry), newfont);
+    gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog));
+  gtk_entry_set_text (GTK_ENTRY(entry), newfont);
   gtk_widget_destroy (dialog);
 }
 
-static void
+void
 font_browse_clicked (GtkWidget *w, gpointer data)
 {
   GtkWidget *font_dialog;
+  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
   font_dialog = gtk_font_selection_dialog_new ("Select Font");
   gtk_font_selection_dialog_set_preview_text (GTK_FONT_SELECTION_DIALOG (font_dialog), "Gtk Theme Switch");
   
-  gtk_font_selection_dialog_set_font_name (GTK_FONT_SELECTION_DIALOG(font_dialog), 
-					   gtk_entry_get_text(GTK_ENTRY(font_entry)));
+  gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(font_dialog), 
+					   gtk_entry_get_text(GTK_ENTRY(entry)));
 
   g_signal_connect (G_OBJECT(GTK_FONT_SELECTION_DIALOG(font_dialog)->ok_button),
 		    "clicked", G_CALLBACK(set_font), (gpointer)font_dialog);
@@ -458,161 +469,79 @@ quit()
   {
     kill(GPOINTER_TO_INT(l->data), 9);
   }
+
+  g_object_unref(ui);
+
   exit(0);
 }
 
 static void
 dock (void)
 {
-  GtkWidget *label, *button, *pixmap, *evbox;
-     	
+  GList *list = NULL;
+
+  GtkWidget *win;
+  GtkWidget *box;
+  GtkWidget *use_button;
+
   glist = get_dirs();
   glist_icon_themes = get_icon_themes_list();
   get_current_theme_params ();
 
-  dockwin = gtk_dialog_new();
-  gtk_widget_realize(dockwin);
-  gtk_window_set_title(GTK_WINDOW(dockwin),"Theme Dock");
-  gtk_window_set_resizable(GTK_WINDOW(dockwin), FALSE);
-  g_signal_connect(G_OBJECT(dockwin),"destroy",G_CALLBACK(quit),NULL);
-  box = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 5);
-  label = gtk_label_new("Theme: ");
-  gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,FALSE);
+  ui = gtk_builder_new();
+  gtk_builder_add_from_file(ui, 
+			    "/usr/local/share/gtk-theme-switch-ex/ui_main.xml",
+			    NULL);
+  gtk_builder_connect_signals(ui, NULL);
 
+  /* Theme combo box */
   combo = gtk_combo_box_new_text();
+  box = GTK_WIDGET(gtk_builder_get_object(ui, "mw-theme-hbox"));
 	
-  GList *list = NULL;
   for(list = glist; list != NULL; list = list->next)
   {
     gtk_combo_box_append_text (GTK_COMBO_BOX (combo), list->data);
   }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_rc_theme_index);
 
-	
-  gtk_box_pack_start(GTK_BOX(box),combo,TRUE,TRUE,FALSE);
-     	
-  pixmap = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
+  gtk_box_pack_start(GTK_BOX(box), combo, TRUE, TRUE, FALSE);
 
-  evbox = gtk_event_box_new();
-
-  gtk_widget_set_tooltip_text (evbox, "Click here for more options");
-  gtk_widget_set_events(evbox, GDK_BUTTON_PRESS);
-  g_signal_connect(G_OBJECT(evbox), "button_press_event", 
-		   G_CALLBACK(on_eventbox_click), NULL);
-     
-  gtk_container_add(GTK_CONTAINER(evbox), pixmap);
-  gtk_box_pack_start(GTK_BOX(box),evbox,FALSE,FALSE,FALSE);
-  gtk_widget_show_all(box);
-     
-  box = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), box, FALSE, FALSE, 5);
-
-  use_font_button = gtk_check_button_new_with_label("Use font: ");
-  gtk_box_pack_start(GTK_BOX(box), use_font_button, FALSE, FALSE, 0);
-  gtk_widget_show(use_font_button);
-     
-  font_entry = gtk_entry_new ();
-  gtk_entry_set_editable (GTK_ENTRY(font_entry), FALSE);
-  gtk_box_pack_start(GTK_BOX(box), font_entry, TRUE, TRUE, 5);
-  gtk_widget_show(font_entry);
-  if (newfont)
-  {
-    gtk_entry_set_text (GTK_ENTRY(font_entry), newfont);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(use_font_button), TRUE);
-    g_free (newfont);
-  }
-	
-  newfont = g_strdup(gtk_entry_get_text(GTK_ENTRY(font_entry)));
-
-  browse = gtk_button_new_with_label("Browse...");
-  g_signal_connect(G_OBJECT(browse), "clicked", 
-		   G_CALLBACK(font_browse_clicked), NULL);
-  gtk_box_pack_start(GTK_BOX(box), browse, FALSE, FALSE, 5);
-
-  /* Icontheme Box  */
-  box_icontheme = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dockwin)->vbox), 
-		     box_icontheme, FALSE, FALSE, 5);
-
-  use_icon_button = gtk_check_button_new_with_label("Use icon theme: ");
-  gtk_box_pack_start(GTK_BOX(box_icontheme), use_icon_button, FALSE, FALSE, 5);
-  gtk_widget_show(use_icon_button);
-
+  /* Icon theme  */
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-icon-toggle"));
+  box = GTK_WIDGET(gtk_builder_get_object(ui, "mw-icon-hbox"));
   icon_combo = gtk_combo_box_new_text();
-  gtk_box_pack_end(GTK_BOX(box_icontheme),icon_combo,TRUE,TRUE,FALSE);
-  gtk_widget_show(icon_combo);
 
-  for(list = glist_icon_themes; list != NULL; list = list->next)
+  for (list = glist_icon_themes; list != NULL; list = list->next)
   {
-    gtk_combo_box_append_text (GTK_COMBO_BOX (icon_combo), list->data);
+    gtk_combo_box_append_text(GTK_COMBO_BOX(icon_combo), list->data);
   }
+
   if (gtk_rc_icontheme_index >= 0)
   {
-    gtk_combo_box_set_active (GTK_COMBO_BOX (icon_combo), gtk_rc_icontheme_index);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(use_icon_button), TRUE);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(icon_combo), gtk_rc_icontheme_index);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(use_button), TRUE);
   }
 
-  button = gtk_button_new_with_label("Apply");
-  g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(apply_clicked),NULL);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG (dockwin)->action_area),button,
-		     TRUE,TRUE,FALSE);
-  gtk_widget_show(button);
-     
-  button = gtk_button_new_with_label("Preview");
-  g_signal_connect(GTK_OBJECT(button),"clicked",
-		   G_CALLBACK(preview_clicked),NULL);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG (dockwin)->action_area),
-		     button,TRUE,TRUE,FALSE);
-  gtk_widget_show(button);
-     
-  install_button = gtk_button_new_with_label("Install GTK+ Theme");
-  g_signal_connect(G_OBJECT(install_button), "clicked", 
-		   G_CALLBACK(install_clicked), NULL);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG (dockwin)->action_area),
-		     install_button,TRUE,TRUE,FALSE);
-
-  button = gtk_button_new_with_label("Exit");
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (gtk_main_quit), NULL);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG (dockwin)->action_area),
-		     button,TRUE,TRUE,FALSE);
-  gtk_widget_show(button);
+  gtk_box_pack_start(GTK_BOX(box), icon_combo, TRUE, TRUE, FALSE);
   
-  gtk_widget_show(dockwin);
-}
+  /* Font */
+  GtkWidget *font_entry = 
+    GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-font-toggle"));
 
-void 
-on_eventbox_click()
-{
-  if (hidden) {
-    show_stuff();
-  } else {
-    hide_stuff();
+  if (newfont)
+  {
+    gtk_entry_set_text(GTK_ENTRY(font_entry), newfont);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(use_button), TRUE);
+    g_free (newfont);
   }
-}
 
-void 
-hide_stuff()
-{
-  gtk_widget_hide(box);
-  gtk_widget_hide(box_icontheme);
-  gtk_widget_hide(install_button);
-  gtk_widget_hide(browse);
-  gtk_window_resize (GTK_WINDOW (dockwin), 1, 1);
-  hidden = 1;
+  newfont = g_strdup(gtk_entry_get_text(GTK_ENTRY(font_entry)));
+  
+  /* Main Window */
+  win = GTK_WIDGET(gtk_builder_get_object(ui, "main-window"));
+  gtk_widget_show_all(win);
 }
-
-void 
-show_stuff()
-{
-  gtk_widget_show(box);
-  gtk_widget_show(box_icontheme);
-  gtk_widget_show(install_button);
-  gtk_widget_show(browse);
-  hidden = 0;
-}
-
 	
 static GtkTreeModel *
 create_model (void)
