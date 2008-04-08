@@ -2,6 +2,7 @@
   <object class="GtkWindow" id="main-window">
     <property name="resizable">False</property>
     <property name="title">Gtk Theme Switch Ex</property>
+    <signal name="destroy" handler="quit" object="main-window"/>
     <child>
       <object class="GtkVBox" id="mw-main-vbox">  <!-- Main vbox -->
 	<property name="homogeneous">False</property>
@@ -31,7 +32,7 @@
 	    <property name="spacing">10</property>
 	    <property name="border-width">10</property>
 	    <child>
-	      <object class="GtkCheckButton" id="mw-use-icon-toggle">
+	      <object class="GtkCheckButton" id="use-icon-toggle">
 		<property name="label">Use icon theme:</property>
 	      </object>
 	      <packing>
@@ -51,8 +52,8 @@
 	    <property name="spacing">10</property>
 	    <property name="border-width">10</property>
 	    <child>
-	      <object class="GtkCheckButton" id="mw-use-font-toggle">
-		<property name="label">Use icon theme:</property>
+	      <object class="GtkCheckButton" id="use-font-toggle">
+		<property name="label">Use font:</property>
 	      </object>
 	      <packing>
 		<property name="expand">False</property>
@@ -70,6 +71,9 @@
 	    <child>
 	      <object class="GtkButton" id="font-browse-button">
 		<property name="label">Browse</property>
+		<signal name="clicked" 
+			handler="font_browse_clicked" 
+			object="font-browse-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">False</property>
@@ -103,6 +107,9 @@
 	    <child>
 	      <object class="GtkButton" id="theme-install-button">
 		<property name="label">GTK+ Theme</property>
+		<signal name="clicked" 
+			handler="install_clicked" 
+			object="theme-install-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">False</property>
@@ -136,6 +143,9 @@
 	    <child>
 	      <object class="GtkButton" id="preview-button">
 		<property name="label">Preview</property>
+		<signal name="clicked" 
+			handler="preview_clicked" 
+			object="preview-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">True</property>
@@ -145,6 +155,9 @@
 	    <child>
 	      <object class="GtkButton" id="apply-button">
 		<property name="label">Apply</property>
+		<signal name="clicked" 
+			handler="apply_clicked" 
+			object="apply-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">True</property>
@@ -154,6 +167,9 @@
 	    <child>
 	      <object class="GtkButton" id="exit-button">
 		<property name="label">Exit</property>
+		<signal name="clicked" 
+			handler="quit" 
+			object="exit-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">True</property>
