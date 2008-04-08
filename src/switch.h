@@ -47,6 +47,11 @@
 
 #include "includes.h"
 
+/* Defines - UI */
+#define USE_ICON_TOGGLE "use-icon-toggle"
+#define USE_FONT_TOGGLE "use-font-toggle"
+#define FONT_BUTTON "font-button"
+
 /* Variables */
 GtkBuilder *ui;
 
@@ -61,15 +66,7 @@ gchar *execname;  /* == argv[0] */
 gchar *newfont;  /* The name of a new font to use as the default if the user has
 	       selected one. Otherwise NULL. */
 
-//GtkWidget *dockwin;
 GtkWidget *combo = NULL;
-//GtkWidget *font_entry;
-//GtkWidget *use_font_button;  /* toggle button */
-//GtkWidget *use_icon_button;  /* toggle button */
-//GtkWidget *box;
-//GtkWidget *box_icontheme;  /* hbox for icon theme controls */
-//GtkWidget *install_button;
-//GtkWidget *browse;
 GtkWidget *icon_combo = NULL;  /* combo box for listing icon themes*/
 
 gint hidden = 1;
@@ -93,10 +90,9 @@ static int switcheroo (gchar *actual);
 void install_clicked (GtkWidget *w, gpointer data);
 static void install_ok_clicked (GtkWidget *w, gint arg1, gpointer data);
 static void search_for_theme_or_die_trying (gchar *actual, gchar **rc_file);
-static void set_font (GtkWidget *w, GtkWidget *dialog);
-void font_browse_clicked (GtkWidget *w, gpointer data);
 static void get_current_theme_params (void);
 static GList *get_icon_themes_list (void);
 void quit_preview();
 void quit();
 void clist_insert(GtkTreeView *clist);
+void set_new_font(GtkFontButton *button, gpointer _data);

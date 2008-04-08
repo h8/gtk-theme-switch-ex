@@ -279,14 +279,15 @@ static void
 update_newfont (void)
 {
   GtkWidget *use_button = GTK_WIDGET(gtk_builder_get_object(ui, 
-							    "use-font-toggle"));
-  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
+							    USE_FONT_TOGGLE));
+  GtkWidget *font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
 
   if (newfont) g_free (newfont);
 
   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(use_button)))
   {
-    G_CONST_RETURN gchar *newerfont = gtk_entry_get_text (GTK_ENTRY(entry));
+    G_CONST_RETURN gchar *newerfont =
+      gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_button));
     if (newerfont && newerfont[0])
     {
       newfont = g_strdup(newerfont);
@@ -325,13 +326,13 @@ write_rc_file (gchar *include_file, gchar *path)
   rcfile_data *data = g_new(rcfile_data, 1);
   data->gtkrc_file = include_file;
 
-  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-font-toggle"));
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_FONT_TOGGLE));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_button)))
     data->font_name = newfont;
   else
     data->font_name = NULL;
 
-  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-icon-toggle"));
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_ICON_TOGGLE));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_button)))
     data->icontheme_name = 
       gtk_combo_box_get_active_text (GTK_COMBO_BOX (icon_combo));
@@ -431,34 +432,13 @@ install_ok_clicked (GtkWidget *w, gint arg1, gpointer data)
   g_free (rc_file);
 }
 
-static void
-set_font (GtkWidget *w, GtkWidget *dialog)
+void 
+set_new_font(GtkFontButton *button, gpointer _data)
 {
-  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
+  if (newfont)
+    g_free(newfont);
 
-  if (newfont) g_free (newfont);
-  newfont = 
-    gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog));
-  gtk_entry_set_text (GTK_ENTRY(entry), newfont);
-  gtk_widget_destroy (dialog);
-}
-
-void
-font_browse_clicked (GtkWidget *w, gpointer data)
-{
-  GtkWidget *font_dialog;
-  GtkWidget *entry = GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
-  font_dialog = gtk_font_selection_dialog_new ("Select Font");
-  gtk_font_selection_dialog_set_preview_text (GTK_FONT_SELECTION_DIALOG (font_dialog), "Gtk Theme Switch");
-  
-  gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(font_dialog), 
-					   gtk_entry_get_text(GTK_ENTRY(entry)));
-
-  g_signal_connect (G_OBJECT(GTK_FONT_SELECTION_DIALOG(font_dialog)->ok_button),
-		    "clicked", G_CALLBACK(set_font), (gpointer)font_dialog);
-  g_signal_connect_swapped (G_OBJECT(GTK_FONT_SELECTION_DIALOG(font_dialog)->cancel_button), "clicked", G_CALLBACK(gtk_widget_destroy), (gpointer)font_dialog);
-
-  gtk_widget_show (font_dialog);
+  newfont = g_strdup(gtk_font_button_get_font_name(button));
 }
 
 void 
@@ -472,7 +452,7 @@ quit()
 
   g_object_unref(ui);
 
-  exit(0);
+  gtk_main_quit();
 }
 
 static void
@@ -484,15 +464,18 @@ dock (void)
   GtkWidget *box;
   GtkWidget *use_button;
 
+  G_CONST_RETURN gchar *ui_path = 
+    g_build_filename(DATADIR, APPNAME, "ui_main.xml", NULL);
+
   glist = get_dirs();
   glist_icon_themes = get_icon_themes_list();
-  get_current_theme_params ();
+  get_current_theme_params();
 
   ui = gtk_builder_new();
-  gtk_builder_add_from_file(ui, 
-			    "/usr/local/share/gtk-theme-switch-ex/ui_main.xml",
-			    NULL);
+  gtk_builder_add_from_file(ui, ui_path, NULL);
   gtk_builder_connect_signals(ui, NULL);
+
+  g_free((gchar *)ui_path);
 
   /* Theme combo box */
   combo = gtk_combo_box_new_text();
@@ -507,7 +490,7 @@ dock (void)
   gtk_box_pack_start(GTK_BOX(box), combo, TRUE, TRUE, FALSE);
 
   /* Icon theme  */
-  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-icon-toggle"));
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_ICON_TOGGLE));
   box = GTK_WIDGET(gtk_builder_get_object(ui, "mw-icon-hbox"));
   icon_combo = gtk_combo_box_new_text();
 
@@ -525,20 +508,18 @@ dock (void)
   gtk_box_pack_start(GTK_BOX(box), icon_combo, TRUE, TRUE, FALSE);
   
   /* Font */
-  GtkWidget *font_entry = 
-    GTK_WIDGET(gtk_builder_get_object(ui, "font-entry"));
-  use_button = GTK_WIDGET(gtk_builder_get_object(ui, "use-font-toggle"));
+  GtkWidget *font_button = 
+    GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
+  use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_FONT_TOGGLE));
 
   if (newfont)
   {
-    gtk_entry_set_text(GTK_ENTRY(font_entry), newfont);
+    gtk_font_button_set_font_name(GTK_FONT_BUTTON(font_button), newfont);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(use_button), TRUE);
     g_free (newfont);
   }
 
-  newfont = g_strdup(gtk_entry_get_text(GTK_ENTRY(font_entry)));
-  
-  /* Main Window */
+ /* Main Window */
   win = GTK_WIDGET(gtk_builder_get_object(ui, "main-window"));
   gtk_widget_show_all(win);
 }
