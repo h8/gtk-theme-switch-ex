@@ -1,0 +1,171 @@
+<interface>
+  <object class="GtkWindow" id="main-window">
+    <property name="resizable">False</property>
+    <child>
+      <object class="GtkVBox" id="mw-main-vbox">  <!-- Main vbox -->
+	<property name="homogeneous">False</property>
+	<child>  <!-- Theme hbox  -->
+	  <object class="GtkHBox" id="mw-theme-hbox"> 
+	    <property name="homogeneous">False</property>
+	    <property name="border-width">10</property>
+            <property name="spacing">10</property>
+	    <child>
+	      <object class="GtkLabel" id="mw-theme-label">
+		<property name="label">GTK+ Theme:</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	  </object>  
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child>  <!-- END Theme hbox -->
+	<child>	  <!-- Icon hbox -->
+	  <object class="GtkHBox" id="mw-icon-hbox">
+	    <property name="homogeneous">False</property>
+	    <property name="spacing">10</property>
+	    <property name="border-width">10</property>
+	    <child>
+	      <object class="GtkCheckButton" id="mw-use-icon-toggle">
+		<property name="label">Use icon theme:</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child> <!-- END Icon hbox -->
+	<child>	  <!-- Font hbox -->
+	  <object class="GtkHBox" id="mw-font-hbox">
+	    <property name="homogeneous">False</property>
+	    <property name="spacing">10</property>
+	    <property name="border-width">10</property>
+	    <child>
+	      <object class="GtkCheckButton" id="mw-use-font-toggle">
+		<property name="label">Use icon theme:</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkEntry" id="font-entry">
+	      </object>
+	      <packing>
+		<property name="expand">True</property>
+		<property name="fill">True</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="font-browse-button">
+		<property name="label">Browse</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child> <!-- END Font hbox -->
+	<child>	 <!-- Separator -->
+	  <object class="GtkHSeparator" id="hseparator">
+	  </object>
+	</child> <!-- END Separator -->
+	<child>	  <!-- Install hbox -->
+	  <object class="GtkHBox" id="mw-install-hbox">
+	    <property name="homogeneous">False</property>
+	    <property name="spacing">10</property>
+	    <property name="border-width">10</property>
+	    <child>
+	      <object class="GtkLabel" id="install-label">
+		<property name="label">Install:</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="theme-install-button">
+		<property name="label">GTK+ Theme</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="icon-install-button">
+		<property name="label">Icon Theme</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child> <!-- END Install hbox -->
+	<child>	 <!-- Separator -->
+	  <object class="GtkHSeparator" id="hseparator">
+	  </object>
+	</child> <!-- END Separator -->
+	<child>	  <!-- Dialog hbox -->
+	  <object class="GtkHBox" id="mw-dialog-hbox">
+	    <property name="homogeneous">True</property>
+	    <property name="spacing">10</property>
+	    <property name="border-width">10</property>
+	    <child>
+	      <object class="GtkButton" id="preview-button">
+		<property name="label">Preview</property>
+	      </object>
+	      <packing>
+		<property name="expand">True</property>
+		<property name="fill">True</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="apply-button">
+		<property name="label">Apply</property>
+	      </object>
+	      <packing>
+		<property name="expand">True</property>
+		<property name="fill">True</property>
+	      </packing>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="exit-button">
+		<property name="label">Exit</property>
+	      </object>
+	      <packing>
+		<property name="expand">True</property>
+		<property name="fill">True</property>
+	      </packing>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">True</property>
+	  </packing>
+	</child> <!-- END Dialog hbox -->
+      </object>	<!-- END Main vbox -->
+    </child>
+  </object>
+</interface>
