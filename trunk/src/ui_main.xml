@@ -61,23 +61,13 @@
 	      </packing>
 	    </child>
 	    <child>
-	      <object class="GtkEntry" id="font-entry">
+	      <object class="GtkFontButton" id="font-button">
+		<property name="use-font">True</property>
+		<property name="use-size">True</property>
 	      </object>
 	      <packing>
 		<property name="expand">True</property>
 		<property name="fill">True</property>
-	      </packing>
-	    </child>
-	    <child>
-	      <object class="GtkButton" id="font-browse-button">
-		<property name="label">Browse</property>
-		<signal name="clicked" 
-			handler="font_browse_clicked" 
-			object="font-browse-button"/>
-	      </object>
-	      <packing>
-		<property name="expand">False</property>
-		<property name="fill">False</property>
 	      </packing>
 	    </child>
 	  </object>
@@ -142,7 +132,8 @@
 	    <property name="border-width">10</property>
 	    <child>
 	      <object class="GtkButton" id="preview-button">
-		<property name="label">Preview</property>
+		<property name="use-underline">True</property>
+		<property name="label">_Preview</property>
 		<signal name="clicked" 
 			handler="preview_clicked" 
 			object="preview-button"/>
@@ -154,7 +145,8 @@
 	    </child>
 	    <child>
 	      <object class="GtkButton" id="apply-button">
-		<property name="label">Apply</property>
+		<property name="use-underline">True</property>
+		<property name="label">_Apply</property>
 		<signal name="clicked" 
 			handler="apply_clicked" 
 			object="apply-button"/>
@@ -166,7 +158,8 @@
 	    </child>
 	    <child>
 	      <object class="GtkButton" id="exit-button">
-		<property name="label">Exit</property>
+		<property name="use-underline">True</property>
+		<property name="label">E_xit</property>
 		<signal name="clicked" 
 			handler="quit" 
 			object="exit-button"/>

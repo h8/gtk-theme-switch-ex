@@ -21,6 +21,7 @@ def configure(conf):
 
 	conf.define('VERSION', VERSION)
 	conf.define('DATADIR', os.path.join(conf.env['PREFIX'], 'share'))
+	conf.define('APPNAME', APPNAME)
 	#conf.add_define('GETTEXT_PACKAGE', 'gtk-theme-switch-ex')
 	#conf.add_define('PACKAGE', 'gtk-theme-switch-ex')
 
