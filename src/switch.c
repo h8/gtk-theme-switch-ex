@@ -867,7 +867,7 @@ main (int argc, char *argv[])
 
   else if (strcmp(argv[1], "-_dont-use-this") == 0)
   {
-    preview_dialog(argv[2]);
+    show_preview_dialog(argv[2]);
     exit(0);
     //preview_window (argv[2]); /* GARGARGAR */
   }				  /* hehe, aaronl is crazy */

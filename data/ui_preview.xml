@@ -9,6 +9,8 @@
 
       <object class="GtkVBox" id="main-vbox">
 	<property name="homogeneous">False</property>
+	<property name="border-width">5</property>
+	<property name="spacing">5</property>
 	
 	<child>  <!-- Notebook -->
 	  <object class="GtkNotebook" id="notebook">
@@ -21,9 +23,13 @@
 		    <property name="label">Buttons</property>
 		    <child>
 		      <object class="GtkVBox" id="nb-fr-b-vbox">
+			<property name="border-width">5</property>
+			<property name="spacing">5</property>
 
 			<child>	<!-- Buttons 0 -->
 			  <object class="GtkHBox" id="nb-fr-b-hbox-0">
+			    <property name="spacing">5</property>
+			    <property name="homogeneous">True</property>
 			    <child>
 			      <object class="GtkButton" id="test-button-0">
 				<property name="label">Ok</property>
@@ -48,6 +54,8 @@
 
 			<child>	<!-- Buttons 1 -->
 			  <object class="GtkHBox" id="nb-fr-b-hbox-1">
+			    <property name="spacing">5</property>
+			    <property name="homogeneous">True</property>
 			    <child>
 			      <object class="GtkCheckButton" id="test-button-3">
 				<property name="label">Check it</property>
@@ -86,17 +94,31 @@
 		    <property name="label">Edit</property>
 		    <child>
 		      <object class="GtkVBox" id="nb-fr-e-vbox">
+			<property name="border-width">5</property>
+			<property name="spacing">5</property>
 
 			<child>	<!-- Edit 0 -->
 			  <object class="GtkHBox" id="nb-fr-b-hbox-0">
+			    <property name="spacing">5</property>
 			    <child>
 			      <object class="GtkEntry" id="entry-0">
 			      </object>
 			    </child>
 			    <child>
-			      <object class="GtkSpinButton" id="spin-button">
-				<property name="digits">3</property>
+
+			      <object class="GtkAdjustment" id="adj-0">
+				<property name="lower">0</property>
+				<property name="upper">100</property>
+				<property name="step-increment">1</property>
+				<property name="page-increment">1</property>
+				<property name="page-size">5</property>
+				<property name="value">1</property>
 			      </object>
+
+			      <object class="GtkSpinButton" id="spin-button">
+				<property name="adjustment">adj-0</property>
+			      </object>
+
 			    </child>
 			  </object>
 			  <packing>
@@ -125,9 +147,20 @@
 		</child> <!-- END Frame edit -->
 
 		<child>	<!-- Icon view -->
-		  <object class="GtkScrolledWindow" id="scrolled-1">
+		  <object class="GtkFrame" id="nb-frame-icons">
+		    <property name="label">Icons</property>
 		    <child>
-		      <object class="GtkIconView" id="icon-view">
+		      <object class="GtkAlignment" id="al-0"> 
+			<property name="border-width">5</property>
+			<child>
+			  <object class="GtkScrolledWindow" id="scrolled-1">
+			    <child>
+			      <object class="GtkIconView" id="icon-view">
+				<property name="pixbuf-column">0</property>
+			      </object>
+			    </child>
+			  </object>
+			</child>
 		      </object>
 		    </child>
 		  </object>
@@ -142,9 +175,15 @@
 	    </child> <!-- END First tab -->
 
 	    <child> <!-- Second tab -->
-	      <object class="GtkScrolledWindow" id="scrolled-2">
+	      <object class="GtkAlignment" id="al-0"> 
+		<property name="border-width">5</property>
 		<child>
-		  <object class="GtkTreeView" id="tree-view">
+
+		  <object class="GtkScrolledWindow" id="scrolled-2">
+		    <child>
+		      <object class="GtkTreeView" id="tree-view">
+		      </object>
+		    </child>
 		  </object>
 		</child>
 	      </object>
@@ -169,16 +208,25 @@
 
 	<child>	<!-- Dialog buttons -->
 	  <object class="GtkHBox" id="dialog-hbox">
+	    <property name="homogeneous">True</property>
+	    <property name="spacing">5</property>
+
 	    <child>
 	      <object class="GtkButton" id="apply-button">
 		<property name="label">_Apply</property>
 		<property name="use-underline">True</property>
+		<signal name="clicked"
+			handler="apply_clicked_callback"
+			object="apply-button"/>
 	      </object>
 	    </child>
 	    <child>
 	      <object class="GtkButton" id="cancel-button">
 		<property name="label">_Cancel</property>
 		<property name="use-underline">True</property>
+		<signal name="clicked"
+			handler="delete_callback"
+			object="cancel-button"/>
 	      </object>
 	    </child>
 	  </object>
