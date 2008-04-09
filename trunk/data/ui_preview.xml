@@ -1,0 +1,195 @@
+<interface>
+  <object class="GtkWindow" id="preview-window">
+    <property name="resizable">True</property>
+    <property name="title">Gtk Theme Switch Ex - Theme Preview</property>
+    <signal name="delete-event" 
+	    handler="delete_callback" 
+	    object="preview-window"/>
+    <child>
+
+      <object class="GtkVBox" id="main-vbox">
+	<property name="homogeneous">False</property>
+	
+	<child>  <!-- Notebook -->
+	  <object class="GtkNotebook" id="notebook">
+
+	    <child> <!-- First tab -->
+	      <object class="GtkVBox" id="nb-vbox-0">
+
+		<child>	<!-- Frame buttons -->
+		  <object class="GtkFrame" id="nb-frame-buttons">
+		    <property name="label">Buttons</property>
+		    <child>
+		      <object class="GtkVBox" id="nb-fr-b-vbox">
+
+			<child>	<!-- Buttons 0 -->
+			  <object class="GtkHBox" id="nb-fr-b-hbox-0">
+			    <child>
+			      <object class="GtkButton" id="test-button-0">
+				<property name="label">Ok</property>
+			      </object>
+			    </child>
+			    <child>
+			      <object class="GtkButton" id="test-button-1">
+				<property name="label">Cancel</property>
+			      </object>
+			    </child>
+			    <child>
+			      <object class="GtkToggleButton" id="test-button-2">
+				<property name="label">Toggle</property>
+			      </object>
+			    </child>
+			  </object>
+			  <packing>
+			    <property name="fill">False</property>
+			    <property name="expand">False</property>
+			  </packing>
+			</child> <!-- END Buttons 0 -->
+
+			<child>	<!-- Buttons 1 -->
+			  <object class="GtkHBox" id="nb-fr-b-hbox-1">
+			    <child>
+			      <object class="GtkCheckButton" id="test-button-3">
+				<property name="label">Check it</property>
+			      </object>
+			    </child>
+			    <child>
+			      <object class="GtkRadioButton" id="test-button-4">
+				<property name="label">Radio 1</property>
+				<property name="group">test-button-4</property>
+			      </object>
+			    </child>
+			    <child>
+			      <object class="GtkRadioButton" id="test-button-5">
+				<property name="label">Radio 2</property>
+				<property name="group">test-button-4</property>
+			      </object>
+			    </child>
+			  </object>
+			  <packing>
+			    <property name="fill">False</property>
+			    <property name="expand">False</property>
+			  </packing>
+			</child> <!-- END Buttons 1 -->
+
+		      </object>
+		    </child>
+		  </object>
+		  <packing>
+		    <property name="fill">False</property>
+		    <property name="expand">False</property>
+		  </packing>
+		</child> <!-- END Frame buttons -->
+
+		<child>	<!-- Frame edit -->
+		  <object class="GtkFrame" id="nb-frame-edit">
+		    <property name="label">Edit</property>
+		    <child>
+		      <object class="GtkVBox" id="nb-fr-e-vbox">
+
+			<child>	<!-- Edit 0 -->
+			  <object class="GtkHBox" id="nb-fr-b-hbox-0">
+			    <child>
+			      <object class="GtkEntry" id="entry-0">
+			      </object>
+			    </child>
+			    <child>
+			      <object class="GtkSpinButton" id="spin-button">
+				<property name="digits">3</property>
+			      </object>
+			    </child>
+			  </object>
+			  <packing>
+			    <property name="fill">False</property>
+			    <property name="expand">False</property>
+			  </packing>
+			</child> <!-- END Edit 0 -->
+			
+			<child>	<!-- Text view -->
+			  <object class="GtkScrolledWindow" id="scrolled-0">
+			    <child>
+			      <object class="GtkTextView" id="text-view">
+			      </object>
+			    </child>
+			  </object>
+			</child> <!-- END Text view -->
+
+		      </object>
+		    </child>
+		  </object>
+		  <packing>
+		    <property name="fill">False</property>
+		    <property name="expand">False</property>
+		  </packing>
+		  
+		</child> <!-- END Frame edit -->
+
+		<child>	<!-- Icon view -->
+		  <object class="GtkScrolledWindow" id="scrolled-1">
+		    <child>
+		      <object class="GtkIconView" id="icon-view">
+		      </object>
+		    </child>
+		  </object>
+		</child> <!-- END Icon view -->
+
+	      </object>
+	    </child>
+	    <child type="tab">
+	      <object class="GtkLabel" id="notebook-tab-0">
+		<property name="label">First Tab</property>
+	      </object>
+	    </child> <!-- END First tab -->
+
+	    <child> <!-- Second tab -->
+	      <object class="GtkScrolledWindow" id="scrolled-2">
+		<child>
+		  <object class="GtkTreeView" id="tree-view">
+		  </object>
+		</child>
+	      </object>
+	    </child>
+	    <child type="tab">
+	      <object class="GtkLabel" id="notebook-tab-1">
+		<property name="label">Second Tab</property>
+	      </object>
+	    </child> <!-- END Second tab -->
+
+	  </object>
+	</child>  <!-- END Notebook -->
+
+	<child>	 <!-- Separator -->
+	  <object class="GtkHSeparator" id="hseparator">
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child> <!-- END Separator -->
+
+	<child>	<!-- Dialog buttons -->
+	  <object class="GtkHBox" id="dialog-hbox">
+	    <child>
+	      <object class="GtkButton" id="apply-button">
+		<property name="label">_Apply</property>
+		<property name="use-underline">True</property>
+	      </object>
+	    </child>
+	    <child>
+	      <object class="GtkButton" id="cancel-button">
+		<property name="label">_Cancel</property>
+		<property name="use-underline">True</property>
+	      </object>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child> <!-- END Dialog buttons -->
+
+      </object>
+
+    </child>
+  </object>
+</interface>

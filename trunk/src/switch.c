@@ -34,6 +34,7 @@
 
 #include "switch.h"
 #include "utils.h"
+#include "preview_dialog.h"
 
 #define INIT_GTK if (!using_gtk) { gtk_init (&argc, &argv); using_gtk = 1; }
 #define OVECTOR 6
@@ -354,15 +355,15 @@ ok_clicked (gchar *rc_file)
   g_free(path_to_gtkrc);
 }
 
-static void
+/*static void
 preview_apply_clicked (gchar *rc_file)
-{
+{*/
   /* Write the config file to disk */
-  gchar *path_to_gtkrc = g_strdup_printf("%s/.gtkrc-2.0", homedir);
+/*  gchar *path_to_gtkrc = g_strdup_printf("%s/.gtkrc-2.0", homedir);
   rename (rc_file, path_to_gtkrc);
   send_refresh_signal();
   g_free(path_to_gtkrc);
-}
+  }*/
 
 void 
 install_clicked (GtkWidget *w, gpointer data)
@@ -519,12 +520,12 @@ dock (void)
     g_free (newfont);
   }
 
- /* Main Window */
+  /* Main Window */
   win = GTK_WIDGET(gtk_builder_get_object(ui, "main-window"));
   gtk_widget_show_all(win);
 }
 	
-static GtkTreeModel *
+/*static GtkTreeModel *
 create_model (void)
 {
 
@@ -537,12 +538,12 @@ create_model (void)
 			 { "blah7", "blah8" } };
 
   /* create list store */
-  store = gtk_list_store_new (2,
+/*  store = gtk_list_store_new (2,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING);
-
+*/
   /* add data to the list store */
-  for (i = 0; i < 4; i++)
+/*  for (i = 0; i < 4; i++)
   {
     gtk_list_store_append (store, &iter);
     gtk_list_store_set (store, &iter,
@@ -552,7 +553,7 @@ create_model (void)
   }
 
   return GTK_TREE_MODEL (store);
-}
+}*/
 
 
 static void
@@ -599,7 +600,7 @@ preview (gchar *rc_file)
   ++preview_counter;
 }
 
-static void
+/*static void
 preview_window (gchar *rc_file)
 {
 
@@ -722,15 +723,15 @@ preview_window (gchar *rc_file)
 
   unlink (rc_file);
 	
-  _exit (1); /* no change */ 
-}
+  _exit (1);  
+}*/
 
-void 
+ /*void 
 quit_preview()
 {
   g_print("die=%d\n",getpid());
   gtk_main_quit();
-}
+}*/
 
 static short 
 install_tarball (gchar *path, gchar **rc_file)
@@ -866,7 +867,9 @@ main (int argc, char *argv[])
 
   else if (strcmp(argv[1], "-_dont-use-this") == 0)
   {
-    preview_window (argv[2]); /* GARGARGAR */
+    preview_dialog(argv[2]);
+    exit(0);
+    //preview_window (argv[2]); /* GARGARGAR */
   }				  /* hehe, aaronl is crazy */
 	
   for (i=1; i != argc; ++i)
@@ -947,7 +950,7 @@ main (int argc, char *argv[])
   return result;
 }
 
-void 
+/*void 
 clist_insert(GtkTreeView *clist)
 {
   GtkCellRenderer *renderer;
@@ -978,4 +981,4 @@ clist_insert(GtkTreeView *clist)
   gtk_tree_view_append_column(clist, column);
 
   return;
-}
+  }*/

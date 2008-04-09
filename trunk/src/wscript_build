@@ -7,5 +7,4 @@ obj.includes='.'
 obj.uselib='GTK GDK PANGO GOBJECT PCRE'
 obj.target='switch2'
 
-install_files('DATADIR', 'gtk-theme-switch-ex', 'ui_main.xml')
 
