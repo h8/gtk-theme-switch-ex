@@ -9,8 +9,8 @@
 	<child>  <!-- Theme hbox  -->
 	  <object class="GtkHBox" id="mw-theme-hbox"> 
 	    <property name="homogeneous">False</property>
-	    <property name="border-width">10</property>
-            <property name="spacing">10</property>
+	    <property name="border-width">5</property>
+            <property name="spacing">5</property>
 	    <child>
 	      <object class="GtkLabel" id="mw-theme-label">
 		<property name="label">GTK+ Theme:</property>
@@ -29,8 +29,8 @@
 	<child>	  <!-- Icon hbox -->
 	  <object class="GtkHBox" id="mw-icon-hbox">
 	    <property name="homogeneous">False</property>
-	    <property name="spacing">10</property>
-	    <property name="border-width">10</property>
+	    <property name="spacing">5</property>
+	    <property name="border-width">5</property>
 	    <child>
 	      <object class="GtkCheckButton" id="use-icon-toggle">
 		<property name="label">Use icon theme:</property>
@@ -49,8 +49,8 @@
 	<child>	  <!-- Font hbox -->
 	  <object class="GtkHBox" id="mw-font-hbox">
 	    <property name="homogeneous">False</property>
-	    <property name="spacing">10</property>
-	    <property name="border-width">10</property>
+	    <property name="spacing">5</property>
+	    <property name="border-width">5</property>
 	    <child>
 	      <object class="GtkCheckButton" id="use-font-toggle">
 		<property name="label">Use font:</property>
@@ -83,8 +83,8 @@
 	<child>	  <!-- Install hbox -->
 	  <object class="GtkHBox" id="mw-install-hbox">
 	    <property name="homogeneous">False</property>
-	    <property name="spacing">10</property>
-	    <property name="border-width">10</property>
+	    <property name="spacing">5</property>
+	    <property name="border-width">5</property>
 	    <child>
 	      <object class="GtkLabel" id="install-label">
 		<property name="label">Install:</property>
@@ -128,8 +128,8 @@
 	<child>	  <!-- Dialog hbox -->
 	  <object class="GtkHBox" id="mw-dialog-hbox">
 	    <property name="homogeneous">True</property>
-	    <property name="spacing">10</property>
-	    <property name="border-width">10</property>
+	    <property name="spacing">5</property>
+	    <property name="border-width">5</property>
 	    <child>
 	      <object class="GtkButton" id="preview-button">
 		<property name="use-underline">True</property>
