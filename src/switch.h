@@ -43,7 +43,6 @@
 #include <glib/giochannel.h>
 #include <stdlib.h>
 #include <pcre.h>
-#include <gmodule.h>
 
 #include "includes.h"
 
@@ -80,11 +79,11 @@ void preview_clicked(GtkWidget *button, gpointer data);
 static void update_newfont (void);
 void apply_clicked(GtkWidget *button, gpointer data);
 static void ok_clicked(gchar *rc);
-static void preview_apply_clicked(gchar *rc);
-static GtkTreeModel *create_model(void);
+//static void preview_apply_clicked(gchar *rc);
+//static GtkTreeModel *create_model(void);
 static void dock(void);
 static void preview(gchar *rc_file);
-static void preview_window(gchar *rc_file);
+//static void preview_window(gchar *rc_file);
 static short install_tarball (gchar *path, gchar **rc_file);
 static int switcheroo (gchar *actual);
 void install_clicked (GtkWidget *w, gpointer data);
@@ -92,7 +91,7 @@ static void install_ok_clicked (GtkWidget *w, gint arg1, gpointer data);
 static void search_for_theme_or_die_trying (gchar *actual, gchar **rc_file);
 static void get_current_theme_params (void);
 static GList *get_icon_themes_list (void);
-void quit_preview();
+//void quit_preview();
 void quit();
-void clist_insert(GtkTreeView *clist);
+//void clist_insert(GtkTreeView *clist);
 void set_new_font(GtkFontButton *button, gpointer _data);

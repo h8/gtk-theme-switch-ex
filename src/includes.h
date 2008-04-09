@@ -36,6 +36,7 @@
 #include <glib/gstdio.h>
 
 #include <gtk/gtk.h>
+#include <gmodule.h>
 
 #include <stdio.h>
 #include <string.h>
