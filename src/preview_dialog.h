@@ -31,6 +31,7 @@ gchar *rc_file;
 
 void show_preview_dialog(gchar *rcfile);
 GtkListStore *create_icons_store();
+GtkListStore *create_list_store();
 
 gboolean delete_callback(GtkWidget *widget, GdkEvent *event, gpointer data);
 void apply_clicked_callback(GtkButton *button, gpointer user_data);

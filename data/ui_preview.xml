@@ -2,6 +2,8 @@
   <object class="GtkWindow" id="preview-window">
     <property name="resizable">True</property>
     <property name="title">Gtk Theme Switch Ex - Theme Preview</property>
+    <property name="default-width">400</property>
+    <property name="default-height">500</property>
     <signal name="delete-event" 
 	    handler="delete_callback" 
 	    object="preview-window"/>
@@ -102,6 +104,7 @@
 			    <property name="spacing">5</property>
 			    <child>
 			      <object class="GtkEntry" id="entry-0">
+				<property name="text">Text</property>
 			      </object>
 			    </child>
 			    <child>
@@ -130,7 +133,12 @@
 			<child>	<!-- Text view -->
 			  <object class="GtkScrolledWindow" id="scrolled-0">
 			    <child>
+			      <object class="GtkTextBuffer" id="txt-buf">
+				<property name="text">Type some text here!
+				</property>
+			      </object>
 			      <object class="GtkTextView" id="text-view">
+				<property name="buffer">txt-buf</property>
 			      </object>
 			    </child>
 			  </object>
@@ -140,8 +148,8 @@
 		    </child>
 		  </object>
 		  <packing>
-		    <property name="fill">False</property>
-		    <property name="expand">False</property>
+		    <property name="fill">True</property>
+		    <property name="expand">True</property>
 		  </packing>
 		  
 		</child> <!-- END Frame edit -->
@@ -182,6 +190,31 @@
 		  <object class="GtkScrolledWindow" id="scrolled-2">
 		    <child>
 		      <object class="GtkTreeView" id="tree-view">
+			
+			<child>
+			  <object class="GtkTreeViewColumn" id="col-0">
+			    <property name="title">Name</property>
+			    <child>
+			      <object class="GtkCellRendererText" id="ren-0"/>
+			      <attributes>
+				<attribute name="text">0</attribute>
+			      </attributes>
+			    </child>
+			  </object>
+			</child>
+
+			<child>
+			  <object class="GtkTreeViewColumn" id="col-1">
+			    <property name="title">Value</property>
+			    <child>
+			      <object class="GtkCellRendererText" id="ren-1"/>
+			      <attributes>
+				<attribute name="text">1</attribute>
+			      </attributes>
+			    </child>
+			  </object>
+			</child>
+
 		      </object>
 		    </child>
 		  </object>
@@ -193,6 +226,72 @@
 		<property name="label">Second Tab</property>
 	      </object>
 	    </child> <!-- END Second tab -->
+
+	    <child> <!-- Third tab -->
+	      <object class="GtkVBox" id="nb-vbox-3">
+		<property name="homogeneous">False</property>
+		<property name="border-width">5</property>
+		<property name="spacing">5</property>
+
+		<child>
+		  <object class="GtkAdjustment" id="adj-1">
+		    <property name="lower">0</property>
+		    <property name="upper">100</property>
+		    <property name="step-increment">1</property>
+		    <property name="page-size">1</property>
+		    <property name="value">45</property>
+		  </object>
+		  <object class="GtkProgressBar" id="pb-0">
+		    <property name="text">Progress Bar</property>
+		    <property name="adjustment">adj-1</property>
+		  </object>
+		  <packing>
+		    <property name="fill">False</property>
+		    <property name="expand">False</property>
+		  </packing>
+		</child>
+
+		<child>
+		  <object class="GtkHBox" id="nb-scale-hbox">
+		    <property name="spacing">15</property>
+		    
+		    <child>
+		      <object class="GtkHScale" id="hscale-0">
+			<property name="adjustment">adj-1</property>
+		      </object>
+		    </child>
+		    
+		    <child>
+		      <object class="GtkVScale" id="vscale-0">
+			<property name="adjustment">adj-1</property>
+			<property name="inverted">True</property>
+		      </object>
+		      <packing>
+			<property name="fill">False</property>
+			<property name="expand">False</property>
+		      </packing>
+		    </child>
+
+		    <child>
+		      <object class="GtkVolumeButton" id="vbutton-0">
+			<property name="adjustment">adj-1</property>
+		      </object>
+		      <packing>
+			<property name="fill">False</property>
+			<property name="expand">False</property>
+		      </packing>
+		    </child>
+
+		  </object>
+		</child>
+
+	      </object>
+	    </child>
+	    <child type="tab">
+	      <object class="GtkLabel" id="notebook-tab-2">
+		<property name="label">Third Tab</property>
+	      </object>
+	    </child> <!-- END Third tab -->
 
 	  </object>
 	</child>  <!-- END Notebook -->

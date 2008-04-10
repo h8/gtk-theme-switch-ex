@@ -32,6 +32,8 @@ void
 show_preview_dialog(gchar *rcfile)
 {
   GtkWidget *win;
+  GtkListStore *store;
+  GtkWidget *view;
   gchar *default_files[] = {rcfile, NULL};
   G_CONST_RETURN gchar *ui_path = 
     g_build_filename(DATADIR, APPNAME, "ui_preview.xml", NULL);
@@ -47,9 +49,15 @@ show_preview_dialog(gchar *rcfile)
   g_free((gchar *)ui_path);
 
   /* Icon view */
-  GtkListStore *store = create_icons_store();
-  GtkWidget *icon_view = GTK_WIDGET(gtk_builder_get_object(ui, "icon-view"));
-  gtk_icon_view_set_model(GTK_ICON_VIEW(icon_view), GTK_TREE_MODEL(store));
+  store = create_icons_store();
+  view = GTK_WIDGET(gtk_builder_get_object(ui, "icon-view"));
+  gtk_icon_view_set_model(GTK_ICON_VIEW(view), GTK_TREE_MODEL(store));
+  g_object_unref(store);
+
+  /* Tree view  */
+  store = create_list_store();
+  view = GTK_WIDGET(gtk_builder_get_object(ui, "tree-view"));
+  gtk_tree_view_set_model(GTK_TREE_VIEW(view), GTK_TREE_MODEL(store));
   g_object_unref(store);
 
   /* Main Window */
@@ -76,8 +84,10 @@ create_icons_store()
   GString *buffer = g_string_new("");
 
   file_io = g_io_channel_new_file(names_file_path, "r", NULL);
+
   if (!file_io)
     return NULL;
+
   g_io_channel_set_flags(file_io, G_IO_FLAG_NONBLOCK, NULL);
   g_io_channel_set_encoding(file_io, getenv("LANG"), NULL);
 
@@ -100,6 +110,24 @@ create_icons_store()
   g_free((gchar *)names_file_path);
   g_io_channel_shutdown(file_io, TRUE, NULL);
   g_io_channel_unref(file_io);
+
+  return store;
+}
+
+GtkListStore *create_list_store()
+{
+  int it;
+
+  GtkListStore *store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+  GtkTreeIter iter;
+
+  for (it = 0; it < 5; it++)
+  {
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       0, g_strdup_printf("Item %i", it),
+		       1, g_strdup_printf("Item %i value", it), -1);
+  }
 
   return store;
 }
