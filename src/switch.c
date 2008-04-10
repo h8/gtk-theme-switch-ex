@@ -756,11 +756,106 @@ install_icons_clicked_callback(GtkButton *button, gpointer user_data)
   gtk_widget_destroy (fc);  
 }
 
-void about_clicked_callback()
+void 
+about_clicked_callback()
 {
   GtkWidget *about_dlg = GTK_WIDGET(gtk_builder_get_object(ui, "about-dialog"));
   gtk_dialog_run(GTK_DIALOG(about_dlg));
   gtk_widget_hide(about_dlg);
+}
+
+void 
+save_preset_clicked_callback()
+{
+  GtkWidget *fc;
+  GtkWidget *font_button;
+  gint result;
+  FILE *preset;
+  gchar *file;
+
+  fc = gtk_file_chooser_dialog_new("Save preset",
+				   NULL,
+				   GTK_FILE_CHOOSER_ACTION_SAVE,
+				   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				   GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				   NULL);
+
+  result = gtk_dialog_run(GTK_DIALOG(fc));
+
+  if (result == GTK_RESPONSE_ACCEPT)
+  {
+    file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fc));
+    preset = g_fopen(file, "w");
+
+    fprintf(preset, "%s\n",
+	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo)));
+    fprintf(preset, "%i\n",
+	    gtk_combo_box_get_active(GTK_COMBO_BOX(toolbar_combo)));
+    fprintf(preset, "%s\n",
+	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(icon_combo)));
+    font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
+    fprintf(preset, "%s",
+	    gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_button)));
+
+    fclose (preset);
+    g_free(file);
+  }
+
+  gtk_widget_destroy(fc);
+}
+
+void 
+open_preset_clicked_callback()
+{
+  GtkWidget *fc;
+  GtkWidget *font_button;
+  gint result;
+  FILE *preset;
+  gchar *file;
+  char tempbuf[16384];
+
+  fc = gtk_file_chooser_dialog_new("Open preset",
+				   NULL,
+				   GTK_FILE_CHOOSER_ACTION_OPEN,
+				   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				   NULL);
+
+  result = gtk_dialog_run(GTK_DIALOG(fc));
+
+  if (result == GTK_RESPONSE_ACCEPT)
+  {
+    file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fc));
+
+    GIOChannel*  rc_file_io = NULL;
+    GIOStatus status;
+
+    preset = g_fopen(file, "r");
+
+    fgets(tempbuf, 16383, preset);
+    g_printf("%s", tempbuf);
+    fgets(tempbuf, 16383, preset);
+    g_printf("%s", tempbuf);
+    fgets(tempbuf, 16383, preset);
+    g_printf("%s", tempbuf);
+    fgets(tempbuf, 16383, preset);
+    g_printf("%s", tempbuf);
+
+    /*fprintf(preset, "%s\n",
+	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo)));
+    fprintf(preset, "%i\n",
+	    gtk_combo_box_get_active(GTK_COMBO_BOX(toolbar_combo)));
+    fprintf(preset, "%s\n",
+	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(icon_combo)));
+    font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
+    fprintf(preset, "%s",
+    gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_button)));*/
+
+    fclose (preset);
+    g_free(file);
+  }
+
+  gtk_widget_destroy(fc);
 }
 
 int 
