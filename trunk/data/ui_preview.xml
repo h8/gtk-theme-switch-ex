@@ -1,4 +1,53 @@
 <interface>
+
+  <object class="GtkUIManager" id="uimanager">
+    <child>
+      <object class="GtkActionGroup" id="actiongroup1">
+        <child>
+          <object class="GtkAction" id="File">
+            <property name="name">File</property>
+            <property name="label">File</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="open">
+            <property name="stock_id">gtk-open</property>
+            <property name="name">open</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="save">
+            <property name="stock_id">gtk-save</property>
+            <property name="name">save</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="save-as">
+            <property name="stock_id">gtk-save-as</property>
+            <property name="name">save-as</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="exit">
+            <property name="stock_id">gtk-quit</property>
+            <property name="name">exit</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <ui>
+      <menubar name="menubar">
+        <menu action="File">
+          <menuitem action="open"/>
+          <menuitem action="save"/>
+          <menuitem action="save-as"/>
+          <separator/>
+          <menuitem action="exit"/>
+        </menu>
+      </menubar>
+    </ui>
+  </object>
+
   <object class="GtkWindow" id="preview-window">
     <property name="resizable">True</property>
     <property name="title">Gtk Theme Switch Ex - Theme Preview</property>
@@ -13,6 +62,44 @@
 	<property name="homogeneous">False</property>
 	<property name="border-width">5</property>
 	<property name="spacing">5</property>
+
+	<child>	<!-- MenuBar -->
+	  <object class="GtkMenuBar" constructor="uimanager" id="menubar">
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child>  <!-- END MenuBar -->
+
+	<child>	<!-- Toolbar -->
+	  <object class="GtkToolbar" id="toolbar">
+	    <child>
+	      <object class="GtkToolButton" id="tb-open">
+		<property name="stock-id">gtk-open</property>
+	      </object>
+	    </child>
+	    <child>
+	      <object class="GtkToolButton" id="tb-save">
+		<property name="stock-id">gtk-save</property>
+	      </object>
+	    </child>
+	    <child>
+	      <object class="GtkToolButton" id="tb-saveas">
+		<property name="stock-id">gtk-save-as</property>
+	      </object>
+	    </child>
+	    <child>
+	      <object class="GtkToolButton" id="tb-close">
+		<property name="stock-id">gtk-close</property>
+	      </object>
+	    </child>
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child>  <!-- END Toolbar -->
 	
 	<child>  <!-- Notebook -->
 	  <object class="GtkNotebook" id="notebook">
@@ -34,12 +121,14 @@
 			    <property name="homogeneous">True</property>
 			    <child>
 			      <object class="GtkButton" id="test-button-0">
-				<property name="label">Ok</property>
+				<property name="label">gtk-ok</property>
+				<property name="use-stock">True</property>
 			      </object>
 			    </child>
 			    <child>
 			      <object class="GtkButton" id="test-button-1">
-				<property name="label">Cancel</property>
+				<property name="label">gtk-open</property>
+				<property name="use-stock">True</property>
 			      </object>
 			    </child>
 			    <child>
@@ -132,6 +221,7 @@
 			
 			<child>	<!-- Text view -->
 			  <object class="GtkScrolledWindow" id="scrolled-0">
+			    <property name="shadow-type">1</property>
 			    <child>
 			      <object class="GtkTextBuffer" id="txt-buf">
 				<property name="text">Type some text here!
@@ -162,6 +252,7 @@
 			<property name="border-width">5</property>
 			<child>
 			  <object class="GtkScrolledWindow" id="scrolled-1">
+			    <property name="shadow-type">1</property>
 			    <child>
 			      <object class="GtkIconView" id="icon-view">
 				<property name="pixbuf-column">0</property>
@@ -188,6 +279,7 @@
 		<child>
 
 		  <object class="GtkScrolledWindow" id="scrolled-2">
+		    <property name="shadow-type">1</property>
 		    <child>
 		      <object class="GtkTreeView" id="tree-view">
 			
@@ -312,8 +404,8 @@
 
 	    <child>
 	      <object class="GtkButton" id="apply-button">
-		<property name="label">_Apply</property>
-		<property name="use-underline">True</property>
+		<property name="label">gtk-apply</property>
+		<property name="use-stock">True</property>
 		<signal name="clicked"
 			handler="apply_clicked_callback"
 			object="apply-button"/>
@@ -321,8 +413,8 @@
 	    </child>
 	    <child>
 	      <object class="GtkButton" id="cancel-button">
-		<property name="label">_Cancel</property>
-		<property name="use-underline">True</property>
+		<property name="label">gtk-cancel</property>
+		<property name="use-stock">True</property>
 		<signal name="clicked"
 			handler="delete_callback"
 			object="cancel-button"/>

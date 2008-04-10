@@ -67,6 +67,7 @@ gchar *newfont;  /* The name of a new font to use as the default if the user has
 
 GtkWidget *combo = NULL;
 GtkWidget *icon_combo = NULL;  /* combo box for listing icon themes*/
+GtkWidget *toolbar_combo = NULL;
 
 gint hidden = 1;
 gint preview_counter = 0;
@@ -90,3 +91,5 @@ static void get_current_theme_params (void);
 static GList *get_icon_themes_list (void);
 void quit();
 void set_new_font(GtkFontButton *button, gpointer _data);
+void install_icons_clicked_callback(GtkButton *button, gpointer user_data);
+void about_clicked_callback();
