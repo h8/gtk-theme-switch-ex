@@ -9,6 +9,20 @@
             <property name="label">_File</property>
           </object>
         </child>
+	<child>
+          <object class="GtkAction" id="open-pr">
+            <property name="stock_id">gtk-open</property>
+            <property name="name">open</property>
+            <signal handler="open_preset_clicked_callback" name="activate"/>
+          </object>
+        </child>
+	<child>
+          <object class="GtkAction" id="save-pr">
+            <property name="stock_id">gtk-save</property>
+            <property name="name">save</property>
+            <signal handler="save_preset_clicked_callback" name="activate"/>
+          </object>
+        </child>
         <child>
           <object class="GtkAction" id="exit">
             <property name="stock_id">gtk-quit</property>
@@ -34,6 +48,9 @@
     <ui>
       <menubar name="menubar">
         <menu action="file">
+	  <menuitem action="open-pr"/>
+	  <menuitem action="save-pr"/>
+	  <separator/>
           <menuitem action="exit"/>
         </menu>
         <menu action="help">

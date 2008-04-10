@@ -93,3 +93,5 @@ void quit();
 void set_new_font(GtkFontButton *button, gpointer _data);
 void install_icons_clicked_callback(GtkButton *button, gpointer user_data);
 void about_clicked_callback();
+void save_preset_clicked_callback();
+void open_preset_clicked_callback();
