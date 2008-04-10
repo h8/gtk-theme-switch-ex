@@ -525,37 +525,6 @@ dock (void)
   gtk_widget_show_all(win);
 }
 	
-/*static GtkTreeModel *
-create_model (void)
-{
-
-  GtkListStore *store;
-  GtkTreeIter iter;
-  gint i;
-  gchar *stuff[4][2] = { { "blah1", "blah2" },
-			 { "blah3", "blah4" },
-			 { "blah5", "blah6" },
-			 { "blah7", "blah8" } };
-
-  /* create list store */
-/*  store = gtk_list_store_new (2,
-			      G_TYPE_STRING,
-			      G_TYPE_STRING);
-*/
-  /* add data to the list store */
-/*  for (i = 0; i < 4; i++)
-  {
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-			0, stuff[i][0],
-			1, stuff[i][1],
-			-1);
-  }
-
-  return GTK_TREE_MODEL (store);
-}*/
-
-
 static void
 preview (gchar *rc_file)
 {
@@ -599,139 +568,6 @@ preview (gchar *rc_file)
   g_free (command);
   ++preview_counter;
 }
-
-/*static void
-preview_window (gchar *rc_file)
-{
-
-  GtkWidget *label;
-  GtkWidget *win;
-  GtkWidget *button;
-  GtkWidget *button2;
-  GtkWidget *toggle_button;
-  GtkWidget *check_button;
-  GtkWidget *sw;
-  GtkWidget *clist;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *radio;
-  GtkWidget *radio2;
-  GtkWidget *radio3;
-  GtkWidget *ok;
-  GtkWidget *cancel;
-  GtkWidget *hbox2;
-  GtkWidget *notebook;
-  GtkWidget *text;
-  GtkTreeModel *model;
-  GtkTextBuffer *buff;
-  gint argc=1;
-  gchar **argv = &execname;
-  gchar *default_files[] = { rc_file, NULL};
-  gchar *bb  = "Type some text here\nto check if your\ntheme has a problem\nwith the text widget.\nAlso right-click here\nfor a popup-menu sample.\n";
-  GSList *group;
-
-  gtk_rc_set_default_files (default_files);
-  gtk_init (&argc, &argv);
-	
-  win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(win), "Gtk Theme Switch theme preview");
-  g_signal_connect(G_OBJECT(win), "destroy", G_CALLBACK(quit_preview), NULL);
-	
-  vbox = gtk_vbox_new(FALSE,0);
-  notebook = gtk_notebook_new();
-  gtk_container_add (GTK_CONTAINER(win), notebook);
-  label = gtk_label_new("Page 1");
-  gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
-  label = gtk_label_new("Label");
-  button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-  button2 = gtk_button_new_from_stock (GTK_STOCK_OPEN);
-  toggle_button = gtk_toggle_button_new_with_label("Toggle Button");
-  check_button = gtk_check_button_new_with_label("Check Button");
-  hbox = gtk_hbox_new(FALSE, 2);
-  radio = gtk_radio_button_new_with_label(NULL,"Radio 1");
-  group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio));
-  radio2 = gtk_radio_button_new_with_label(group,"Radio 2");
-  group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio2));
-  radio3 = gtk_radio_button_new_with_label(group,"Radio 3");
-  gtk_box_pack_start((GtkBox*)hbox,radio,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)hbox,radio2,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)hbox,radio3,FALSE,FALSE,FALSE);
-  sw = gtk_scrolled_window_new(NULL,NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-				 GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-  model = create_model();
-  clist = gtk_tree_view_new_with_model(model);
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (clist), TRUE);
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (clist),0);     
-  g_object_unref (G_OBJECT (model));     
-
-  ok = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  g_signal_connect_swapped(G_OBJECT(ok),"clicked",
-			   G_CALLBACK(preview_apply_clicked), 
-			   (gpointer) rc_file);
-  cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  g_signal_connect_swapped(G_OBJECT(cancel),"clicked",
-			   G_CALLBACK(quit_preview),NULL);
-  hbox2 = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_start((GtkBox*)hbox2,ok,TRUE,TRUE,FALSE);
-  gtk_box_pack_start((GtkBox*)hbox2,cancel,TRUE,TRUE,FALSE);
-  gtk_container_add(GTK_CONTAINER(sw),clist);
-  gtk_box_pack_start((GtkBox*)vbox,label,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,button,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,button2,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,toggle_button,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,check_button,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,hbox,FALSE,FALSE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,sw,TRUE,TRUE,FALSE);
-  gtk_box_pack_start((GtkBox*)vbox,hbox2,FALSE,FALSE,FALSE);
-
-  vbox = gtk_vbox_new (FALSE, 0);
-  label = gtk_label_new ("Page 2");
-  gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
-  label = gtk_label_new ("Insensitive Label");
-  gtk_widget_set_sensitive (label, 0);
-  gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 5);
-  button = gtk_button_new_with_label ("Insensitive Button");
-  gtk_widget_set_sensitive (button, 0);
-  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 5);
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(sw), 
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  buff = gtk_text_buffer_new(NULL);
-  gtk_text_buffer_set_text(buff,bb, strlen(bb));
-  text = gtk_text_view_new();
-  gtk_text_view_set_buffer(GTK_TEXT_VIEW(text), buff);
-				 
-  gtk_container_add (GTK_CONTAINER(sw), text);
-
-  gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 5);
-
-  label = gtk_label_new ("About");
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_notebook_append_page (GTK_NOTEBOOK(notebook), vbox, label);
-  label = gtk_label_new ("Gtk Theme Switch Ex v. 2.0.0svn\nby Dmitry Stropaloff <helions8@gmail.com>\nHome: http://code.google.com/p/gtk-theme-switch-ex\n\nBased on the source code of Gtk Theme Switch software.");
-  gtk_box_pack_start (GTK_BOX(vbox), label, TRUE, TRUE, 5);
-
-  clist_insert(GTK_TREE_VIEW(clist));
-
-  gtk_widget_show_all(win);
-
-
-  g_print("pid=%d\n",getpid());
-
-  gtk_main ();
-
-  unlink (rc_file);
-	
-  _exit (1);  
-}*/
-
- /*void 
-quit_preview()
-{
-  g_print("die=%d\n",getpid());
-  gtk_main_quit();
-}*/
 
 static short 
 install_tarball (gchar *path, gchar **rc_file)
@@ -869,8 +705,7 @@ main (int argc, char *argv[])
   {
     show_preview_dialog(argv[2]);
     exit(0);
-    //preview_window (argv[2]); /* GARGARGAR */
-  }				  /* hehe, aaronl is crazy */
+  }				  
 	
   for (i=1; i != argc; ++i)
   {
@@ -950,35 +785,3 @@ main (int argc, char *argv[])
   return result;
 }
 
-/*void 
-clist_insert(GtkTreeView *clist)
-{
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-
-
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes("Column 1",
-						    renderer,
-						    "text",
-						    0,
-						    NULL);
-
-
-  gtk_tree_view_column_set_sort_column_id(column, 0);
-  gtk_tree_view_append_column(clist, column);
-
-     
-  renderer = gtk_cell_renderer_text_new();
-
-  column = gtk_tree_view_column_new_with_attributes("Column2",
-						    renderer,
-						    "text",
-						    1,
-						    NULL);
-
-  gtk_tree_view_column_set_sort_column_id(column, 1);
-  gtk_tree_view_append_column(clist, column);
-
-  return;
-  }*/
