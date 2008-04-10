@@ -144,6 +144,19 @@ compare_glists (GList *t1, GList *t2, GCompareFunc cmpfunc)
   return 0;
 }
 
+gint 
+get_list_position(GList *glist, const gchar *string)
+{
+  GList *list;
+  gint iter = -1;
+
+  for(list = glist, iter = 0; list != NULL; list = list->next, iter++)
+    if (g_str_equal(list->data, string))
+      return iter;
+
+  return iter;
+}
+
 void
 send_refresh_signal(void)
 {

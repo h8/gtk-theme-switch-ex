@@ -794,7 +794,7 @@ save_preset_clicked_callback()
     fprintf(preset, "%s\n",
 	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(icon_combo)));
     font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
-    fprintf(preset, "%s",
+    fprintf(preset, "%s\n",
 	    gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_button)));
 
     fclose (preset);
@@ -810,9 +810,8 @@ open_preset_clicked_callback()
   GtkWidget *fc;
   GtkWidget *font_button;
   gint result;
-  FILE *preset;
+  gint pos;
   gchar *file;
-  char tempbuf[16384];
 
   fc = gtk_file_chooser_dialog_new("Open preset",
 				   NULL,
@@ -827,32 +826,59 @@ open_preset_clicked_callback()
   {
     file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fc));
 
-    GIOChannel*  rc_file_io = NULL;
+    GIOChannel*  file_io = NULL;
     GIOStatus status;
+    GString *buffer = g_string_new ("");
 
-    preset = g_fopen(file, "r");
+     file_io = g_io_channel_new_file(file, "r", NULL);
+     if (!file_io)
+       return;
+     g_io_channel_set_flags(file_io, G_IO_FLAG_NONBLOCK, NULL);
+     g_io_channel_set_encoding(file_io, getenv ("LANG"), NULL);
+    
+     /* Widgets theme */
+     status = g_io_channel_read_line_string(file_io, buffer, NULL, NULL);
+     if (status == G_IO_STATUS_NORMAL)
+     {
+       buffer = g_string_truncate(buffer, buffer->len - 1);
+       pos = get_list_position(glist, buffer->str);
+       if (pos > -1)
+	 gtk_combo_box_set_active(GTK_COMBO_BOX(combo), pos);
+     } 
 
-    fgets(tempbuf, 16383, preset);
-    g_printf("%s", tempbuf);
-    fgets(tempbuf, 16383, preset);
-    g_printf("%s", tempbuf);
-    fgets(tempbuf, 16383, preset);
-    g_printf("%s", tempbuf);
-    fgets(tempbuf, 16383, preset);
-    g_printf("%s", tempbuf);
+     /* Toolbar style */
+     status = g_io_channel_read_line_string(file_io, buffer, NULL, NULL);
+     if (status == G_IO_STATUS_NORMAL)
+     {
+       buffer = g_string_truncate(buffer, buffer->len - 1);
+       pos = (gint)g_ascii_strtoll(buffer->str, NULL, 0);
+       gtk_combo_box_set_active(GTK_COMBO_BOX(toolbar_combo), pos);
+     } 
 
-    /*fprintf(preset, "%s\n",
-	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(combo)));
-    fprintf(preset, "%i\n",
-	    gtk_combo_box_get_active(GTK_COMBO_BOX(toolbar_combo)));
-    fprintf(preset, "%s\n",
-	    gtk_combo_box_get_active_text(GTK_COMBO_BOX(icon_combo)));
-    font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
-    fprintf(preset, "%s",
-    gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_button)));*/
+     /* Icons theme */
+     status = g_io_channel_read_line_string(file_io, buffer, NULL, NULL);
+     if (status == G_IO_STATUS_NORMAL)
+     {
+       buffer = g_string_truncate(buffer, buffer->len - 1);
+       g_printf("%s\n", buffer->str);
+       pos = get_list_position(glist_icon_themes, buffer->str);
+       if (pos > -1)
+	 gtk_combo_box_set_active(GTK_COMBO_BOX(icon_combo), pos);
+     } 
 
-    fclose (preset);
-    g_free(file);
+     /* Font */
+     status = g_io_channel_read_line_string(file_io, buffer, NULL, NULL);
+     if (status == G_IO_STATUS_NORMAL)
+     {
+       buffer = g_string_truncate(buffer, buffer->len - 1);
+       font_button = GTK_WIDGET(gtk_builder_get_object(ui, FONT_BUTTON));
+       gtk_font_button_set_font_name(GTK_FONT_BUTTON(font_button), buffer->str);
+     } 
+
+     g_string_free(buffer, TRUE);
+     g_io_channel_shutdown(file_io, TRUE, NULL);
+     g_io_channel_unref(file_io);
+     g_free(file);
   }
 
   gtk_widget_destroy(fc);

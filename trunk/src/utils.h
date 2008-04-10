@@ -46,6 +46,7 @@ void usage (void);
 gboolean is_themedir (gchar *path, gchar **rc_file);
 gboolean is_installed_theme (gchar *path, gchar **rc_file, gchar *homedir);
 GList* compare_glists (GList *t1, GList *t2, GCompareFunc cmpfunc);
+gint get_list_position(GList *glist, const gchar *string);
 void send_refresh_signal(void);
 void dump_rcfile(gchar *path, rcfile_data *data);
 gint install_icons_tarball(const gchar *file);
