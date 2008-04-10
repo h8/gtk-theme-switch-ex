@@ -1,4 +1,60 @@
 <interface>
+
+  <object class="GtkUIManager" id="uimanager">
+    <child>
+      <object class="GtkActionGroup" id="actiongroup1">
+        <child>
+          <object class="GtkAction" id="file">
+            <property name="name">file</property>
+            <property name="label">_File</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="exit">
+            <property name="stock_id">gtk-quit</property>
+            <property name="name">exit</property>
+            <signal handler="quit" name="activate"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="help">
+            <property name="name">help</property>
+            <property name="label">_Help</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="about">
+            <property name="stock_id">gtk-about</property>
+            <property name="name">about</property>
+	    <signal handler="about_clicked_callback" name="activate"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <ui>
+      <menubar name="menubar">
+        <menu action="file">
+          <menuitem action="exit"/>
+        </menu>
+        <menu action="help">
+          <menuitem action="about"/>
+        </menu>
+      </menubar>
+    </ui>
+  </object>
+
+  <object class="GtkAboutDialog" id="about-dialog">
+    <property name="program-name">Gtk Theme Switch Ex</property>
+    <property name="website">http://code.google.com/p/gtk-theme-switch-ex</property>
+    <property name="authors">Dmitry Stropaloff helions8@gmail.com</property>
+    <property name="license"> GNU General Public License v.3 or later</property>
+    <property name="comments">Allows you to preview and switch GTK+ themes</property>
+    <property name="version">2.0.0</property>
+    <property name="copyright">Copyright © 2008 Dmitry Stropaloff
+      Copyright © 2003 Aaron Lehman
+      Copyright © 2003 Maher Awamy</property>
+  </object>
+
   <object class="GtkWindow" id="main-window">
     <property name="resizable">False</property>
     <property name="title">Gtk Theme Switch Ex</property>
@@ -6,6 +62,14 @@
     <child>
       <object class="GtkVBox" id="mw-main-vbox">  <!-- Main vbox -->
 	<property name="homogeneous">False</property>
+	<child>	<!-- MenuBar -->
+	  <object class="GtkMenuBar" constructor="uimanager" id="menubar">
+	  </object>
+	  <packing>
+	    <property name="fill">False</property>
+	    <property name="expand">False</property>
+	  </packing>
+	</child>  <!-- END MenuBar -->
 	<child>  <!-- Theme hbox  -->
 	  <object class="GtkHBox" id="mw-theme-hbox"> 
 	    <property name="homogeneous">False</property>
@@ -26,6 +90,22 @@
 	    <property name="expand">False</property>
 	  </packing>
 	</child>  <!-- END Theme hbox -->
+	<child>	 <!-- Toolbar hbox -->
+	  <object class="GtkHBox" id="mw-toolbar-hbox">
+	    <property name="homogeneous">False</property>
+	    <property name="spacing">5</property>
+	    <property name="border-width">5</property>
+	    <child>
+	      <object class="GtkLabel" id="mw-toolbar-label">
+		<property name="label">Toolbar Style:</property>
+	      </object>
+	      <packing>
+		<property name="expand">False</property>
+		<property name="fill">False</property>
+	      </packing>
+	    </child>
+	  </object>
+	</child> <!-- END Toolbar hbox -->
 	<child>	  <!-- Icon hbox -->
 	  <object class="GtkHBox" id="mw-icon-hbox">
 	    <property name="homogeneous">False</property>
@@ -109,6 +189,9 @@
 	    <child>
 	      <object class="GtkButton" id="icon-install-button">
 		<property name="label">Icon Theme</property>
+		<signal name="clicked" 
+			handler="install_icons_clicked_callback" 
+			object="icon-install-button"/>
 	      </object>
 	      <packing>
 		<property name="expand">False</property>

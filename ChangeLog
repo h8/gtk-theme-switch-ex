@@ -1,6 +1,9 @@
 2.0.0
 _____
 - Using GtkBuilder for UI.
+- New main and preview windows.
+- Installing icon themes.
+- Support for toolbar styles.
 
 
 2.0.0rc4

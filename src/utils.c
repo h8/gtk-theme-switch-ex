@@ -34,6 +34,15 @@
 
 #include "utils.h"
 
+static gchar *ToolbarStyles[] = 
+  {
+    "GTK_TOOLBAR_ICONS",
+    "GTK_TOOLBAR_TEXT",
+    "GTK_TOOLBAR_BOTH",
+    "GTK_TOOLBAR_BOTH_HORIZ"
+  };
+
+
 void
 usage (void)
 {
@@ -156,6 +165,9 @@ dump_rcfile(gchar *path, rcfile_data *data)
 	  "# -- THEME AUTO-WRITTEN DO NOT EDIT\ninclude \"%s\"\n", 
 	  data->gtkrc_file);
 
+  fprintf(gtkrc, "gtk-toolbar-style=%s\n", 
+	  ToolbarStyles[data->toolbar_style]);
+
   if (data->font_name)
     fprintf (gtkrc, "gtk-font-name=\"%s\"\n", data->font_name);
 
@@ -164,4 +176,23 @@ dump_rcfile(gchar *path, rcfile_data *data)
     data->icontheme_name);
 
   fclose (gtkrc);
+}
+
+gint 
+install_icons_tarball(const gchar *file)
+{
+  gint result;
+  gchar *iconsdir = g_build_filename(g_get_home_dir(), ".icons", NULL);
+  gchar *command = 
+    g_strdup_printf("tar --directory %s -xzf %s 2>/dev/null", 
+		    iconsdir, file);
+
+  mkdir(iconsdir, 755);
+
+  result = system(command);
+  
+  g_free(command);
+  g_free(iconsdir);
+
+  return result;
 }

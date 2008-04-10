@@ -39,6 +39,14 @@
 #define INIT_GTK if (!using_gtk) { gtk_init (&argc, &argv); using_gtk = 1; }
 #define OVECTOR 6
 
+const gchar *ToolbarStyles[] = 
+  {
+    "Icons only",
+    "Text only",
+    "Text and Icons",
+    "Text and Icons horizontal"
+  };
+
 static void
 get_current_theme_params (void)
 {
@@ -96,8 +104,8 @@ get_current_theme_params (void)
 
     /* Font name  */
     re_result = pcre_exec (re_font, NULL, 
-				 buffer->str, string_length,
-				 0, 0, ovector, OVECTOR);
+			   buffer->str, string_length,
+			   0, 0, ovector, OVECTOR);
     if (re_result > 1)
     {
       pcre_get_substring (buffer->str, ovector, re_result, 1, &res);
@@ -108,8 +116,8 @@ get_current_theme_params (void)
 
     /* Icon theme */
     re_result = pcre_exec (re_icon, NULL, 
-				 buffer->str, string_length,
-				 0, 0, ovector, OVECTOR);
+			   buffer->str, string_length,
+			   0, 0, ovector, OVECTOR);
     if (re_result > 1)
     {
       pcre_get_substring (buffer->str, ovector, re_result, 1, &res);
@@ -327,6 +335,8 @@ write_rc_file (gchar *include_file, gchar *path)
   rcfile_data *data = g_new(rcfile_data, 1);
   data->gtkrc_file = include_file;
 
+  data->toolbar_style = gtk_combo_box_get_active(GTK_COMBO_BOX(toolbar_combo));
+
   use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_FONT_TOGGLE));
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (use_button)))
     data->font_name = newfont;
@@ -354,16 +364,6 @@ ok_clicked (gchar *rc_file)
   send_refresh_signal();
   g_free(path_to_gtkrc);
 }
-
-/*static void
-preview_apply_clicked (gchar *rc_file)
-{*/
-  /* Write the config file to disk */
-/*  gchar *path_to_gtkrc = g_strdup_printf("%s/.gtkrc-2.0", homedir);
-  rename (rc_file, path_to_gtkrc);
-  send_refresh_signal();
-  g_free(path_to_gtkrc);
-  }*/
 
 void 
 install_clicked (GtkWidget *w, gpointer data)
@@ -459,7 +459,10 @@ quit()
 static void
 dock (void)
 {
+  int iter;
+
   GList *list = NULL;
+  GtkToolbarStyle toolbar_style = GTK_TOOLBAR_BOTH;
 
   GtkWidget *win;
   GtkWidget *box;
@@ -489,6 +492,20 @@ dock (void)
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_rc_theme_index);
 
   gtk_box_pack_start(GTK_BOX(box), combo, TRUE, TRUE, FALSE);
+
+  /* Toolbar style */
+  toolbar_combo = gtk_combo_box_new_text();
+  box = GTK_WIDGET(gtk_builder_get_object(ui, "mw-toolbar-hbox"));
+  for (iter = 0; iter < 4; iter++)
+  {
+    gtk_combo_box_append_text(GTK_COMBO_BOX(toolbar_combo), 
+			      ToolbarStyles[iter]);
+  }
+  g_object_get(gtk_settings_get_default(), 
+	       "gtk-toolbar-style", &toolbar_style, NULL);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(toolbar_combo), toolbar_style);
+
+  gtk_box_pack_start(GTK_BOX(box), toolbar_combo, TRUE, TRUE, FALSE);
 
   /* Icon theme  */
   use_button = GTK_WIDGET(gtk_builder_get_object(ui, USE_ICON_TOGGLE));
@@ -678,7 +695,73 @@ switcheroo (gchar *actual)
   return EXIT_SUCCESS;
 }
 
+void
+install_icons_clicked_callback(GtkButton *button, gpointer user_data)
+{
+  gint result;
+  gint iter = 0;
+  gchar *file;
+  GtkWidget *fc;
+  GtkWidget *message;
+  GList *new_icons_list;
+  GList *list;
+  GList *new_theme;
 
+  fc = gtk_file_chooser_dialog_new ("Select an icon theme tarball",
+				    NULL,
+				    GTK_FILE_CHOOSER_ACTION_OPEN,
+				    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				    GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				    NULL);
+
+  result = gtk_dialog_run (GTK_DIALOG (fc));
+  if (result == GTK_RESPONSE_ACCEPT)
+  {
+    file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fc));
+    if (install_icons_tarball(file) != EXIT_SUCCESS)
+    {
+      message = gtk_message_dialog_new (NULL,
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_ERROR,
+					GTK_BUTTONS_CLOSE,
+					"Error installing file '%s'",
+					file);
+      gtk_dialog_run(GTK_DIALOG(message));
+      gtk_widget_destroy(message);
+    }
+    else
+    {
+      new_icons_list = get_icon_themes_list();
+      new_theme = compare_glists(glist_icon_themes, 
+				 new_icons_list, (GCompareFunc)strcmp);
+      
+      if (new_theme)
+      {
+	g_list_foreach(glist_icon_themes, (GFunc)g_free, NULL);
+	g_list_free(glist_icon_themes);
+	glist_icon_themes = new_icons_list;
+
+	gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(icon_combo))));
+	for (list = new_icons_list; list != NULL; list = list->next, iter++)
+	{
+	  gtk_combo_box_append_text(GTK_COMBO_BOX(icon_combo), list->data);
+	  if (g_str_equal(list->data, new_theme->data))
+	    gtk_combo_box_set_active(GTK_COMBO_BOX(icon_combo), iter);
+	}
+      }
+    }
+    g_free(file);
+  }
+
+  gtk_widget_destroy (fc);  
+}
+
+void about_clicked_callback()
+{
+  GtkWidget *about_dlg = GTK_WIDGET(gtk_builder_get_object(ui, "about-dialog"));
+  gtk_dialog_run(GTK_DIALOG(about_dlg));
+  gtk_widget_hide(about_dlg);
+}
 
 int 
 main (int argc, char *argv[])
