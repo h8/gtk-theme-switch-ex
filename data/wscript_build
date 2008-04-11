@@ -3,4 +3,4 @@
 
 install_files('DATADIR', 'gtk-theme-switch-ex', 'icon-names')
 install_files('DATADIR', 'gtk-theme-switch-ex', 'ui_main.xml')
-install_files('DATADIR', 'gtk-theme-switch-ex', 'ui_dialog.xml')
+install_files('DATADIR', 'gtk-theme-switch-ex', 'ui_preview.xml')
