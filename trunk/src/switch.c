@@ -548,6 +548,7 @@ preview (gchar *rc_file)
   FILE *pipe;
   gint got_it = 0, it_died = 0;
   gchar *line;
+  char *res;
   gchar *path = g_strdup_printf ("%s/.gtkrc.tmp-%i", homedir, preview_counter);
   gchar *command = g_strdup_printf ("%s -_dont-use-this %s &", execname, path);
   write_rc_file (rc_file, path);
@@ -563,7 +564,8 @@ preview (gchar *rc_file)
      	
   line = (gchar *)g_malloc(1024);     
   while(!feof(pipe)) {
-    fgets(line,1024,pipe);
+    res = fgets(line,1024,pipe);
+    g_free(res);  /* res is used to avoid gcc warns about ret value of fgets */
     line[strlen(line)-1] = '\0';	       
     if (!got_it && !g_strncasecmp(line,"pid=",4)) {
       kids = g_slist_append(kids,GINT_TO_POINTER(atoi(line+4)));

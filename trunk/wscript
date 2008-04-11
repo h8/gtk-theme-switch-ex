@@ -42,6 +42,7 @@ def build(bld):
 	
 	bld.add_subdirs('src')
 	bld.add_subdirs('man')
+	bld.add_subdirs('data')
 
 def shutdown():
 	pass
